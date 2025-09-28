@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
-
-function Login({ onSignUpRedirect }) {
-  const [form, setForm] = useState({
+import axios from 'axios';
+function Login() {
+  const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
@@ -13,15 +13,32 @@ function Login({ onSignUpRedirect }) {
   }, []);
   const passwordType = showPassword ? 'text' : 'password';
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setForm(prev => ({ ...prev, [name]: value }));
-  };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Login Data:", form);
-  };
+
+  const handleChange = (e) =>{
+  setFormData(
+    {
+      ...formData,
+      [e.target.name]: e.target.value
+
+
+    }
+  )
+
+}
+
+
+
+  const handleSubmit = async (e) => {   
+  e.preventDefault();
+    console.log("Submitting formData:", formData); 
+  try {
+    const res = await axios.post("http://localhost:3000/api/auth/login", formData);
+    alert(res.data.message);
+  } catch (err) {
+    alert(err.response?.data?.message || "Error occurred");
+  }
+};
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-neutral-100 p-4">
@@ -41,7 +58,7 @@ function Login({ onSignUpRedirect }) {
                 id="email"
                 name="email"
                 placeholder="Your Email"
-                value={form.email}
+                value={formData.email}
                 onChange={handleChange}
                 className="w-full p-2 pl-9 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-gray-900"
               />
@@ -51,11 +68,11 @@ function Login({ onSignUpRedirect }) {
               <span className="block mb-1 text-sm font-medium text-gray-700">Password</span>
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900 w-4 h-4" />
               <input
-                type={passwordType}
+                type={passwordType}  // important
                 id="password"
                 name="password"
                 placeholder="Your password"
-                value={form.password}
+                value={formData.password}
                 onChange={handleChange}
                 className="w-full p-2 pl-9 pr-10 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-gray-900"
               />
@@ -81,7 +98,7 @@ function Login({ onSignUpRedirect }) {
 
           <div className="text-center text-sm mt-4">
             <span className="text-gray-600">Don't have an account? </span>
-            <button type="button" onClick={onSignUpRedirect} className="text-black font-semibold hover:underline">
+            <button type="button" className="text-black font-semibold hover:underline">
               Sign Up
             </button>
           </div>
