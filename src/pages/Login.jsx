@@ -43,6 +43,7 @@ function Login() {
     const res = await axios.post("http://localhost:3000/api/auth/login", formData);
     console.log(res.data);
     alert(res.data.message);
+    navigate('/home');
   } catch (err) {
     alert(err.response?.data?.message || "Error occurred");
   }

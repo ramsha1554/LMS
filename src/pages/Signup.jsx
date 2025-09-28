@@ -3,9 +3,13 @@ import { Mail, Lock, User, Eye , EyeOff} from "lucide-react";
 import axios from 'axios';
 import { useState , useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'; // import useNavigate
-
+import { useDispatch } from 'react-redux';
+import { setUser } from '../redux/userSlice.js';
 
 function Signup() {
+const dispatch = useDispatch();
+
+
     const navigate = useNavigate(); // initialize useNavigate
 const [formData, setFormData] = useState({
     name: '',
