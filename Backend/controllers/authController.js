@@ -8,7 +8,7 @@ const SignUp=  async (req, res) => {
 try {
 
 
-   const  {name, email, password} = req.body;
+   const  {name, email, password, role} = req.body;
 
    
     let existingUser = await User.findOne({email});
@@ -24,7 +24,7 @@ try {
         return res.status(400).json({message: 'Please provide a valid email'});
     }
 let hashedPassword = await bcrypt.hash(password, 10);
-const user = await User.create({name, email, password: hashedPassword});
+const user = await User.create({name, email, password: hashedPassword , role});
 const token = await genToken(user._id);
 res.cookie('token', token, {
 

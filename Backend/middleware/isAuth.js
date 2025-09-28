@@ -8,12 +8,13 @@ try {
     if(!token){
         return res.status(401).json({message: 'Unauthorized'});
     }
-    const decoded = await jwt.verify(token, process.env.JWT_SECRET);
-    const user = await User.findById(decoded.userId);   
-    if(!user){
+    const verifyToken = await jwt.verify(token, process.env.JWT_SECRET);
+  
+    if(!verifyToken ){
         return res.status(401).json({message: 'Unauthorized'});
     }
-    req.user = user;
+    req.userId = verifyToken.userId;
+  
     next();
 
 } catch (error) {
