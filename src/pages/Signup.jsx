@@ -1,9 +1,12 @@
 import React from 'react';
-import { Mail, Lock, User, Eye } from "lucide-react"; 
+import { Mail, Lock, User, Eye , EyeOff} from "lucide-react"; 
 import axios from 'axios';
-import { useState } from 'react';
+import { useState , useCallback } from 'react';
+import { useNavigate } from 'react-router-dom'; // import useNavigate
+
 
 function Signup() {
+    const navigate = useNavigate(); // initialize useNavigate
 const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -23,24 +26,32 @@ const handleChange = (e) =>{
 
 }
 
-const handleSubmit = async (e) => {   // <-- async add kiya
+const handleSubmit = async (e) => {   
   e.preventDefault();
+    console.log("Submitting formData:", formData); 
   try {
     const res = await axios.post("http://localhost:3000/api/auth/signup", formData);
     alert(res.data.message);
+    navigate('/login'); // redirect to login page after successful signup
   } catch (err) {
     alert(err.response?.data?.message || "Error occurred");
   }
 };
 
-const handleRoleChange = (role) =>{
-  setFormData({
-    ...formData,
+const handleRoleChange = (role) => {
+  setFormData(prev => ({
+    ...prev,
     role: role
-  })
-}
+  }));
+};
 
 
+
+  const [showPassword, setShowPassword] = useState(false);
+  const togglePasswordVisibility = useCallback(() => {
+    setShowPassword(prev => !prev);
+  }, []);
+  const passwordType = showPassword ? 'text' : 'password';
 
 
   return (
@@ -88,7 +99,7 @@ const handleRoleChange = (role) =>{
               <span className="block mb-1 text-sm font-medium text-gray-700">Password</span>
               <Lock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-900 w-4 h-4" />
               <input
-                type="password"
+                type={passwordType}    // important
                 id="password"
                 name="password"
                 value={formData.password}
@@ -96,11 +107,12 @@ const handleRoleChange = (role) =>{
                 placeholder="Your password"
                 className="w-full p-2 pl-9 pr-10 border border-gray-300 rounded-md text-sm focus:ring-1 focus:ring-gray-900"
               />
-              <button
+               <button
                 type="button"
+                onClick={togglePasswordVisibility}
                 className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-900"
               >
-                <Eye className="w-4 h-4" />
+                {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
               </button>
             </div>
 
@@ -108,12 +120,16 @@ const handleRoleChange = (role) =>{
             <div className="pt-2 flex justify-start space-x-2">
               <button type="button" 
               onClick={() => handleRoleChange('student')}
-             className="px-4 py-2 text-sm rounded-md font-medium bg-white text-gray-700 border">
+            className={`px-4 py-2 text-sm rounded-md font-medium border ${
+      formData.role === 'student' ? 'bg-black text-white' : 'bg-white text-gray-700'
+    }`}>
                 Student
               </button>
               <button type="button"
               onClick={() => handleRoleChange('educator')}
-             className="px-4 py-2 text-sm rounded-md font-medium bg-white text-gray-700 border">
+                className={`px-4 py-2 text-sm rounded-md font-medium border ${
+      formData.role === 'educator' ? 'bg-black text-white' : 'bg-white text-gray-700'
+    }`}>
                 Educator
               </button>
             </div>
@@ -127,7 +143,9 @@ const handleRoleChange = (role) =>{
           {/* Login redirect */}
           <div className="text-center text-sm mt-4">
             <span className="text-gray-600">Already have an account? </span>
-            <button type="button" className="text-black font-semibold hover:underline">
+            <button type="button" className="text-black font-semibold hover:underline"
+            onClick={() => navigate('/login')} // navigate to login page
+            >
               Login
             </button>
           </div>

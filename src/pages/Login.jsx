@@ -1,7 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import axios from 'axios';
+
+import { useNavigate } from 'react-router-dom'; // import useNavigate
+
+
+
 function Login() {
+
+    const navigate = useNavigate(); // initialize useNavigate
   const [formData, setFormData] = useState({
     email: "",
     password: "",
@@ -34,6 +41,7 @@ function Login() {
     console.log("Submitting formData:", formData); 
   try {
     const res = await axios.post("http://localhost:3000/api/auth/login", formData);
+    console.log(res.data);
     alert(res.data.message);
   } catch (err) {
     alert(err.response?.data?.message || "Error occurred");
@@ -98,7 +106,9 @@ function Login() {
 
           <div className="text-center text-sm mt-4">
             <span className="text-gray-600">Don't have an account? </span>
-            <button type="button" className="text-black font-semibold hover:underline">
+            <button type="button" className="text-black font-semibold hover:underline"
+            onClick={()=> navigate('/signup')} // navigate to signup page
+            >
               Sign Up
             </button>
           </div>
