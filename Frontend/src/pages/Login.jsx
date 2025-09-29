@@ -1,13 +1,14 @@
 import React, { useState, useCallback } from 'react';
 import { Mail, Lock, Eye, EyeOff } from "lucide-react";
 import axios from 'axios';
-
+import { useDispatch } from "react-redux";
+import { setUserData } from "../redux/userSlice";
 import { useNavigate } from 'react-router-dom'; // import useNavigate
-
-
+import { toast } from "react-toastify";
+import { FaTimesCircle } from "react-icons/fa";
 
 function Login() {
-
+const dispatch = useDispatch();
     const navigate = useNavigate(); // initialize useNavigate
   const [formData, setFormData] = useState({
     email: "",
@@ -41,11 +42,47 @@ function Login() {
     console.log("Submitting formData:", formData); 
   try {
     const res = await axios.post("http://localhost:3000/api/auth/login", formData);
-    console.log(res.data);
-    alert(res.data.message);
+    // console.log(res.data);
+
+       // Redux store mein save karna
+       dispatch(setUserData(res.data.user));
+toast.success("Login Successful!", {     
+  position: "top-right",
+  autoClose: 3000,
+  hideProgressBar: false, 
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  style: {
+    background: "#4caf50",
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: "16px",
+    borderRadius: "10px",
+  },
+});
+
+
     navigate('/home');
   } catch (err) {
-    alert(err.response?.data?.message || "Error occurred");
+   toast.error(
+  <div className="flex items-center gap-2">
+    <FaTimesCircle className="text-white" />
+    <span className="text-white font-semibold">Login Failed!</span>
+  </div>,
+  {
+    position: "top-right",
+    autoClose: 3000,
+    className: "bg-red-500 rounded-lg shadow px-4 py-2",
+    hideProgressBar: false,
+    closeOnClick: true,
+    pauseOnHover: true,
+    draggable: true,
+  }
+);
+
+    console.error(err)
   }
 };
 

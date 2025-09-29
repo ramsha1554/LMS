@@ -4,8 +4,9 @@ import axios from 'axios';
 import { useState , useCallback } from 'react';
 import { useNavigate } from 'react-router-dom'; // import useNavigate
 import { useDispatch } from 'react-redux';
-import { setUser } from '../redux/userSlice.js';
+import { setUserData } from "../redux/userSlice.js";
 
+import { toast } from "react-toastify";
 function Signup() {
 const dispatch = useDispatch();
 
@@ -35,7 +36,26 @@ const handleSubmit = async (e) => {
     console.log("Submitting formData:", formData); 
   try {
     const res = await axios.post("http://localhost:3000/api/auth/signup", formData);
-    alert(res.data.message);
+
+
+toast.success("Signup Successful!", {     
+  position: "top-right",
+  autoClose: 3000,
+  hideProgressBar: false, 
+  closeOnClick: true,
+  pauseOnHover: true,
+  draggable: true,
+  progress: undefined,
+  style: {
+    background: "#4caf50",
+    color: "#fff",
+    fontWeight: "bold",
+    fontSize: "16px",
+    borderRadius: "10px",
+  },
+});
+
+ dispatch(setUserData(res.data.user));
     navigate('/login'); // redirect to login page after successful signup
   } catch (err) {
     alert(err.response?.data?.message || "Error occurred");
