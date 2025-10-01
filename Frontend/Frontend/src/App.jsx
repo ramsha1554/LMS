@@ -3,12 +3,11 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEffect } from "react";
 import { useSelector } from "react-redux";
-import forgetPassword from "./pages/ForgetPassword";
+
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
-import ForgetPassword from "./pages/ForgetPassword";
  
 
 const App = () => {
@@ -25,7 +24,6 @@ const App = () => {
         <Route path="/home" element={<Home />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-         <Route path="/forget" element={<ForgetPassword />} />
        
       </Routes>
     </>
