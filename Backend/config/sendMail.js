@@ -18,25 +18,17 @@ const transport = nodemailer.createTransport({
   });
 
 
-const sendMail = async (to, subject, text) => {
-  const mailOptions = {
-    from: process.env.USER_EMAIL,   
-    to,
-    subject,
-    text,
-    };
-    try {
-      
-        await transport.sendMail(mailOptions);
-        console.log('Email sent successfully');
-    } catch (error) {
-        console.error('Error sending email:', error);
-    }
-};
+const sendMail =async(to , otp) =>{
 
+  await transport.sendMail({
+    from: process.env.USER_EMAIL,
+    to: to,
+    subject: 'Password Reset OTP',
+    text: `Your OTP for password reset is: ${otp}. It is valid for 5 minutes.`,
+  }); 
+
+
+
+
+}
 module.exports = sendMail;
-
-
-
-  
-  module.exports = transport;
