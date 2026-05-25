@@ -17,6 +17,7 @@ function ViewCourse() {
     )
 
     const [selectedLecture, setSelectedLecture] = useState(null)
+    const [isEnrolled, setIsEnrolled] = useState(false)
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
