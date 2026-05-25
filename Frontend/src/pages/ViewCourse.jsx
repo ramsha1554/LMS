@@ -1,7 +1,18 @@
 import React, { useState } from 'react'
-import { FaArrowLeftLong, FaStar, FaPlayCircle, FaLock } from "react-icons/fa6";
+import {
+  FaArrowLeftLong,
+  FaStar,
+  FaPlayCircle,
+  FaLock,
+  FaInfinity
+} from "react-icons/fa6";
+
+import { MdDevices } from "react-icons/md";
+import { PiCertificateFill } from "react-icons/pi";
+
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+
 import img from "../assets/empty.jpg"
 
 function ViewCourse() {
@@ -17,35 +28,81 @@ function ViewCourse() {
     )
 
     const [selectedLecture, setSelectedLecture] = useState(null)
+
     const [isEnrolled, setIsEnrolled] = useState(false)
 
     const loadRazorpayScript = () => {
 
-    return new Promise((resolve) => {
+        return new Promise((resolve) => {
 
-        const script = document.createElement("script")
+            const script = document.createElement("script")
 
-        script.src = "https://checkout.razorpay.com/v1/checkout.js"
+            script.src = "https://checkout.razorpay.com/v1/checkout.js"
 
-        script.onload = () => {
-            resolve(true)
+            script.onload = () => {
+                resolve(true)
+            }
+
+            script.onerror = () => {
+                resolve(false)
+            }
+
+            document.body.appendChild(script)
+
+        })
+
+    }
+
+    const handlePayment = async () => {
+
+        const res = await loadRazorpayScript()
+
+        if(!res){
+
+            alert("Razorpay SDK failed to load")
+
+            return
+
         }
 
-        script.onerror = () => {
-            resolve(false)
+        try {
+
+            const response = await fetch(
+                "http://localhost:8000/api/payment/order",
+                {
+
+                    method:"POST",
+
+                    headers:{
+                        "Content-Type":"application/json"
+                    },
+
+                    body: JSON.stringify({
+                        courseId:selectedCourse?._id
+                    })
+
+                }
+            )
+
+            const data = await response.json()
+
+            console.log(data)
+
+        } catch (error) {
+
+            console.log(error)
+
         }
 
-        document.body.appendChild(script)
-
-    })
-
-}
+    }
 
   return (
     
     <div className='min-h-screen bg-gray-50 p-6'>
 
         <div className='max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-8'>
+
+            {/* Back Button */}
 
             <FaArrowLeftLong
              className='text-black w-[22px] h-[22px] cursor-pointer'
@@ -80,6 +137,8 @@ function ViewCourse() {
                         {selectedCourse?.subTitle}
                     </p>
 
+                    {/* Ratings */}
+
                     <div className='flex items-center gap-2 text-yellow-500'>
 
                         <span className='flex items-center gap-1'>
@@ -93,9 +152,13 @@ function ViewCourse() {
 
                     </div>
 
+                    {/* Category */}
+
                     <p className='text-gray-600'>
                         Category: {selectedCourse?.category}
                     </p>
+
+                    {/* Pricing */}
 
                     <div>
 
@@ -109,26 +172,50 @@ function ViewCourse() {
 
                     </div>
 
-                    <ul className='space-y-2 text-gray-700 pt-2'>
+                    {/* Course Benefits */}
 
-                        <li>✅ Full lifetime access</li>
-                        <li>✅ Access on mobile and desktop</li>
-                        <li>✅ Certificate of completion</li>
+                    <ul className='space-y-3 text-gray-700 pt-2'>
+
+                        <li className='flex items-center gap-3'>
+
+                            <FaInfinity className='text-[#03394b] w-[18px] h-[18px]' />
+
+                            Full lifetime access
+
+                        </li>
+
+                        <li className='flex items-center gap-3'>
+
+                            <MdDevices className='text-[#03394b] w-[20px] h-[20px]' />
+
+                            Access on mobile and desktop
+
+                        </li>
+
+                        <li className='flex items-center gap-3'>
+
+                            <PiCertificateFill className='text-[#03394b] w-[20px] h-[20px]' />
+
+                            Certificate of completion
+
+                        </li>
 
                     </ul>
 
-   <button
- className='bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 cursor-pointer'
- onClick={()=>setIsEnrolled(true)}
->
+                    {/* Enroll Button */}
 
-    {
-        isEnrolled
-        ? "Continue Learning"
-        : "Enroll Now"
-    }
+                    <button
+                     className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer transition-all duration-200'
+                     onClick={handlePayment}
+                    >
 
-</button>                 
+                        {
+                            isEnrolled
+                            ? "Continue Learning"
+                            : "Enroll Now"
+                        }
+
+                    </button>
 
                 </div>
 
@@ -158,17 +245,16 @@ function ViewCourse() {
                                 <button
                                  key={index}
 
-                            disabled={!lecture.isPreviewFree && !isEnrolled}
+                                 disabled={!lecture.isPreviewFree && !isEnrolled}
 
                                  onClick={()=>{
                                     if(lecture.isPreviewFree || isEnrolled){
-    setSelectedLecture(lecture)
-
+                                        setSelectedLecture(lecture)
                                     }
                                  }}
 
                                  className={`flex items-center gap-3 px-4 py-3 rounded-lg border text-left transition-all duration-200
-                                 ${lecture.isPreviewFree
+                                 ${lecture.isPreviewFree || isEnrolled
                                     ? "hover:bg-gray-100 border-gray-300 cursor-pointer"
                                     : "opacity-60 border-gray-200 cursor-not-allowed"
                                  }`}
