@@ -1,6 +1,7 @@
 import Nav from "../component/Nav"
 import home from "../assets/home1.jpg"
 import Logos from "../component/Logos"
+import CardPage from "../component/CardPage"
 import ExploreCourses from "../component/ExploreCourses"
 import { SiViaplay } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
@@ -68,6 +69,7 @@ const Home = () => {
 
   <Logos />
   <ExploreCourses />
+  <CardPage />
     </div>
 
   )
