@@ -1,12 +1,23 @@
 import React from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 
 function ViewLecture() {
 
     const navigate = useNavigate()
 
     const { lectureId } = useParams()
+
+    const { courseData } = useSelector(state => state.course)
+
+    const allLectures = courseData?.flatMap(
+        course => course.lectures || []
+    )
+
+    const selectedLecture = allLectures?.find(
+        lecture => lecture._id === lectureId
+    )
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
@@ -26,22 +37,36 @@ function ViewLecture() {
 
                 <div className='lg:col-span-2 bg-white rounded-2xl shadow-md p-5'>
 
-                    <div className='aspect-video bg-black rounded-xl flex items-center justify-center'>
+                    <div className='aspect-video bg-black rounded-xl overflow-hidden flex items-center justify-center'>
 
-                        <span className='text-white'>
-                            Video Player
-                        </span>
+                        {
+                            selectedLecture?.videoUrl ? (
+
+                                <video
+                                 src={selectedLecture?.videoUrl}
+                                 controls
+                                 className='w-full h-full object-cover'
+                                />
+
+                            ) : (
+
+                                <span className='text-white'>
+                                    Lecture Video
+                                </span>
+
+                            )
+                        }
 
                     </div>
 
                     <div className='mt-5'>
 
                         <h1 className='text-2xl font-bold'>
-                            Lecture Title
+                            {selectedLecture?.lectureTitle}
                         </h1>
 
                         <p className='text-gray-500 mt-2'>
-                            Lecture ID: {lectureId}
+                            Continue your learning journey.
                         </p>
 
                     </div>
@@ -58,13 +83,24 @@ function ViewLecture() {
 
                     <div className='space-y-3'>
 
-                        <div className='border rounded-lg p-3 cursor-pointer hover:bg-gray-50'>
-                            Introduction Lecture
-                        </div>
+                        {
+                            allLectures?.map((lecture,index)=>(
 
-                        <div className='border rounded-lg p-3 cursor-pointer hover:bg-gray-50'>
-                            Advanced Concepts
-                        </div>
+                                <div
+                                 key={index}
+                                 className={`border rounded-lg p-3 cursor-pointer transition-all duration-200
+                                 ${lecture._id === lectureId
+                                    ? "bg-black text-white"
+                                    : "hover:bg-gray-50"
+                                 }`}
+                                >
+
+                                    {lecture.lectureTitle}
+
+                                </div>
+
+                            ))
+                        }
 
                     </div>
 
