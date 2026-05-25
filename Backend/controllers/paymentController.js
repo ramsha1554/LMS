@@ -1,42 +1,74 @@
-import RazorPayInstance from "../config/razorpay.js"
+import User from "../model/userModel.js"
 import Course from "../model/courseModel.js"
+import RazorPayInstance from "../config/razorpay.js"
 
-export const RazorpayOrder = async (req,res) => {
+export const verifyPayment = async (req,res) => {
 
     try {
 
-        const { courseId } = req.body
+        const {
 
-        const course = await Course.findById(courseId)
+            courseId,
 
-        if(!course){
+            userId,
 
-            return res.status(404).json({
-                message:"Course is not found"
+            razorpay_order_id
+
+        } = req.body
+
+        const orderInfo = await RazorPayInstance.orders.fetch(
+            razorpay_order_id
+        )
+
+        if(orderInfo.status === 'paid'){
+
+            const user = await User.findById(userId)
+
+            if(!user.enrolledCourses.includes(courseId)){
+
+                user.enrolledCourses.push(courseId)
+
+                await user.save()
+
+            }
+
+            const course = await Course.findById(courseId)
+
+            if(!course.enrolledStudents.includes(userId)){
+
+                course.enrolledStudents.push(userId)
+
+                await course.save()
+
+            }
+
+            return res.status(200).json({
+
+                message:"Payment verified and enrollment successful"
+
             })
 
         }
 
-        const options = {
+        else{
 
-            amount: course.price * 100,
+            return res.status(400).json({
 
-            currency:'INR',
+                message:"Payment failed"
 
-            receipt:`${courseId}`
+            })
 
         }
-
-        const order = await RazorPayInstance.orders.create(options)
-
-        return res.status(200).json(order)
 
     } catch (error) {
 
         return res.status(500).json({
-            message:`Failed to create Razorpay Order ${error}`
+
+            message:`Internal server error during payment verification ${error}`
+
         })
 
     }
 
 }
+ 
