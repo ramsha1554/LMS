@@ -1,11 +1,24 @@
 import React from 'react'
 import Nav from '../component/Nav'
+import { useSelector } from 'react-redux'
 
 function AllCourses() {
+
+  const { courseData } = useSelector(state => state.course)
+
   return (
-    <div>
+    <div className='flex min-h-screen bg-gray-50'>
       <Nav />
-      <h1>All Courses</h1>
+
+      <main className='w-full py-[130px] px-[20px]'>
+        <h1 className='text-3xl font-bold'>
+          All Courses
+        </h1>
+
+        <p className='mt-3 text-gray-600'>
+          Total Courses: {courseData?.length}
+        </p>
+      </main>
     </div>
   )
 }
