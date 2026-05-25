@@ -2,10 +2,11 @@ import React, { useState } from 'react'
 import {
   FaArrowLeftLong,
   FaStar,
-  FaPlayCircle,
   FaLock,
   FaInfinity
 } from "react-icons/fa6";
+
+import { FaPlayCircle } from "react-icons/fa";
 
 import { MdDevices } from "react-icons/md";
 import { PiCertificateFill } from "react-icons/pi";
