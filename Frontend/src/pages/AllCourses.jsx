@@ -9,9 +9,22 @@ function AllCourses() {
 
   return (
     <div className='flex min-h-screen bg-gray-50'>
+
       <Nav />
 
-      <main className='w-full py-[130px] px-[20px]'>
+      {/* Sidebar */}
+
+      <aside className='w-[260px] h-screen bg-black fixed top-0 left-0 py-[130px] px-6'>
+
+        <h2 className='text-white text-2xl font-bold'>
+          Filter Courses
+        </h2>
+
+      </aside>
+
+      {/* Main Content */}
+
+      <main className='w-full py-[130px] px-[20px] md:pl-[300px]'>
 
         <h1 className='text-3xl font-bold'>
           All Courses
