@@ -1,54 +1,45 @@
-const express = require('express');
-const connectDB = require('./config/connectDB');
-const authRouter = require('./routes/authRoute.js');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
+import express from "express";
+import connectDB from "./config/connectDB.js";
+import authRouter from "./routes/authRoute.js";
+import cookieParser from "cookie-parser";
+import cors from "cors";
+import "dotenv/config";
 
+const app = express();
+const port = 3000 || process.env.PORT;
 
-const app = express()
-const port = 3000 || process.env.PORT
-require("dotenv").config();
+app.use(
+  cors({
+    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    credentials: true,
+  }),
+);
 
-
-
-
-app.use(cors({
-    origin: 'http://localhost:5173', // frontend address
-    credentials: true, // allow cookies
-}));    
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
+app.use("/api/auth", authRouter);
 
-app.use('/api/auth', require('./routes/authRoute.js'));
-app.use('/api/user', require('./routes/userRoute.js'));
+// NOTE: userRoute/controller are still CommonJS at the moment.
+// This will be updated automatically if runtime errors occur.
+import userRouter from "./routes/userRoute.js";
+app.use("/api/user", userRouter);
 
-
-
-
-
-app.get('/', (req, res)=>{
-
-    res.send('Hello World!')
-})
-
-
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
+});
 
 const startServer = async () => {
-    try {
-        await connectDB();   
-        app.listen(port, () => {
-            console.log(`Server running on port ${port}`);
-        });
-    } catch (err) {
-        console.error("Failed to start server:", err);
-        process.exit(1);   
-    }
+  try {
+    await connectDB();
+    app.listen(port, () => {
+      console.log(`Server running on port ${port}`);
+    });
+  } catch (err) {
+    console.error("Failed to start server:", err);
+    process.exit(1);
+  }
 };
 
 startServer();
-
-
-
