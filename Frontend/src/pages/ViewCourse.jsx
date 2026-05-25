@@ -138,8 +138,9 @@ function ViewCourse() {
                             disabled={!lecture.isPreviewFree && !isEnrolled}
 
                                  onClick={()=>{
-                                    if(lecture.isPreviewFree){
-                                        setSelectedLecture(lecture)
+                                    if(lecture.isPreviewFree || isEnrolled){
+    setSelectedLecture(lecture)
+
                                     }
                                  }}
 
