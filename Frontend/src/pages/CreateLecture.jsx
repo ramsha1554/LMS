@@ -1,6 +1,9 @@
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
+import axios from 'axios';
+import { serverUrl } from '../App';
+import { toast } from 'react-toastify';
 
 function CreateLecture() {
 
@@ -9,6 +12,36 @@ function CreateLecture() {
     const { courseId } = useParams()
 
     const [lectureTitle, setLectureTitle] = useState("")
+
+    const handleCreateLecture = async (e) => {
+
+        e.preventDefault()
+
+        try {
+
+            const lectureData = {
+                lectureTitle
+            }
+
+            await axios.post(
+                `${serverUrl}/api/course/createlecture/${courseId}`,
+                lectureData,
+                { withCredentials: true }
+            )
+
+            toast.success("Lecture created successfully")
+
+            setLectureTitle("")
+
+        } catch (error) {
+
+            console.log(error)
+
+            toast.error("Failed to create lecture")
+
+        }
+
+    }
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
@@ -28,7 +61,10 @@ function CreateLecture() {
                 Create lecture content for this course.
             </p>
 
-            <form className='space-y-5'>
+            <form
+             className='space-y-5'
+             onSubmit={handleCreateLecture}
+            >
 
                 {/* Lecture Title */}
 
@@ -47,6 +83,15 @@ function CreateLecture() {
                     />
 
                 </div>
+
+                {/* Submit Button */}
+
+                <button
+                 type='submit'
+                 className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer'
+                >
+                    Create Lecture
+                </button>
 
             </form>
 
