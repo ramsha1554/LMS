@@ -47,17 +47,33 @@ function EnrolledCourses() {
                                     {course?.category}
                                 </p>
 
-                                <div className='flex items-center justify-between pt-2'>
+                               <div className='space-y-3 pt-2'>
 
-                                    <span className='text-sm text-gray-500'>
-                                        {course?.lectures?.length || 0} Lectures
-                                    </span>
+    <div className='flex items-center justify-between'>
 
-                                    <button className='bg-black text-white px-4 py-2 rounded-lg text-sm'>
-                                        Continue
-                                    </button>
+        <span className='text-sm text-gray-500'>
+            {course?.lectures?.length || 0} Lectures
+        </span>
 
-                                </div>
+        <span className='text-sm text-gray-500'>
+            40% Completed
+        </span>
+
+    </div>
+
+    {/* Progress Bar */}
+
+    <div className='w-full bg-gray-200 rounded-full h-2 overflow-hidden'>
+
+        <div className='bg-black h-full w-[40%]'></div>
+
+    </div>
+
+    <button className='bg-black text-white px-4 py-2 rounded-lg text-sm w-full'>
+        Continue Learning
+    </button>
+
+</div>
 
                             </div>
 
