@@ -1,26 +1,31 @@
 import { Route, Routes } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useEffect } from "react";
+
 import { useSelector } from "react-redux";
+
+
 import forgetPassword from "./pages/ForgetPassword";
 
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
-import ForgetPassword from "./pages/ForgetPassword";
+
 import AllCourses from "./pages/AllCourses";
 import ViewCourse from "./pages/ViewCourse";
 import CreateCourses from "./pages/CreateCourses";
 import EditCourse from "./pages/EditCourse";
 import CreateLecture from "./pages/CreateLecture";
-import EditLecture from "./pages/EditLecture";  
- 
+import EditLecture from "./pages/EditLecture";
+
+import RequireAuth from "./components/RequireAuth";
+
+import getCurrentUser from "./customHooks/getCurrentUser";
 
 const App = () => {
-  const { userData } = useSelector((state) => state.user);
+  // Hydrate redux from cookie on first load.
+  getCurrentUser();
 
- 
 
   return (
     <>
@@ -29,23 +34,51 @@ const App = () => {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/home" element={<Home />} />
+
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
-         <Route path="/forget" element={<ForgetPassword />} />
+        <Route path="/forget" element={<forgetPassword />} />
 
+        <Route path="/allcourses" element={<AllCourses />} />
+        <Route path="/course/:courseId" element={<ViewCourse />} />
 
-          <Route path="/allcourses" element={<AllCourses />} />
-          <Route path="/course/:courseId" element={<ViewCourse />} />
-          
-          <Route path="/createcourse" element={<CreateCourses />} />  
-          <Route path="/editcourse/:courseId" element={<EditCourse />} />
-          <Route path="/createlecture/:courseId" element={<CreateLecture />} />
-          <Route path="/editlecture/:courseId/:lectureId" element={<EditLecture />} />
-
-       
+        {/* Protected routes */}
+        <Route
+          path="/createcourse"
+          element={
+            <RequireAuth>
+              <CreateCourses />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/editcourse/:courseId"
+          element={
+            <RequireAuth>
+              <EditCourse />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/createlecture/:courseId"
+          element={
+            <RequireAuth>
+              <CreateLecture />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/editlecture/:courseId/:lectureId"
+          element={
+            <RequireAuth>
+              <EditLecture />
+            </RequireAuth>
+          }
+        />
       </Routes>
     </>
   );
 };
 
 export default App;
+

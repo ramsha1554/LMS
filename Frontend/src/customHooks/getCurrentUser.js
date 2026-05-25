@@ -1,26 +1,28 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { SERVER_URL } from "../lib/constants";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
+
+import axiosClient from "../lib/axiosClient";
+
 import { setUserData } from "../redux/userSlice";
 
+// Hook to hydrate Redux userData from the cookie/JWT.
+// Call this once at app start.
 const getCurrentUser = () => {
   const dispatch = useDispatch();
+
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await axios.get(
-          SERVER_URL + "/api/user/getcurrentuser",
-          { withCredentials: true },
-        );
-        dispatch(setUserData(result.data));
+        const result = await axiosClient.get("/api/user/getcurrentuser");
+        dispatch(setUserData(result.data.user));
       } catch (error) {
-        console.log(error);
+        // If cookie is missing/expired/invalid, ensure redux reflects logged-out state.
         dispatch(setUserData(null));
       }
     };
+
     fetchUser();
-  }, []);
+  }, [dispatch]);
 };
 
 export default getCurrentUser;
