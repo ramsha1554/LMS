@@ -2,6 +2,9 @@ import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import axios from 'axios';
+import { serverUrl } from '../App';
+import { toast } from 'react-toastify';
 
 function EditCourse() {
 
@@ -27,6 +30,36 @@ function EditCourse() {
         selectedCourse?.category || ""
     )
 
+    const handleUpdateCourse = async (e) => {
+
+        e.preventDefault()
+
+        try {
+
+            const updatedData = {
+                title,
+                subTitle,
+                category
+            }
+
+            await axios.put(
+                `${serverUrl}/api/course/editcourse/${courseId}`,
+                updatedData,
+                { withCredentials: true }
+            )
+
+            toast.success("Course updated successfully")
+
+        } catch (error) {
+
+            console.log(error)
+
+            toast.error("Failed to update course")
+
+        }
+
+    }
+
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
 
@@ -45,7 +78,10 @@ function EditCourse() {
                 Update your course information.
             </p>
 
-            <form className='space-y-5'>
+            <form
+             className='space-y-5'
+             onSubmit={handleUpdateCourse}
+            >
 
                 {/* Course Title */}
 
@@ -114,6 +150,15 @@ function EditCourse() {
                     </select>
 
                 </div>
+
+                {/* Submit Button */}
+
+                <button
+                 type='submit'
+                 className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer'
+                >
+                    Save Changes
+                </button>
 
             </form>
 
