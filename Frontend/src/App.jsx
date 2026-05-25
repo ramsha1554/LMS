@@ -10,7 +10,7 @@ import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import ForgetPassword from "./pages/ForgetPassword";
  
-
+<Route path="/allcourses" element={<AllCourses />} />
 const App = () => {
   const { userData } = useSelector((state) => state.user);
 
@@ -26,6 +26,9 @@ const App = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
          <Route path="/forget" element={<ForgetPassword />} />
+
+         
+          <Route path="/allcourses" element={<AllCourses />} />
        
       </Routes>
     </>
