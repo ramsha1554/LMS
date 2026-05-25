@@ -5,10 +5,12 @@ import CardPage from "../component/CardPage"
 import About from "../component/About"
 import ExploreCourses from "../component/ExploreCourses"
 import ReviewPage from "../component/ReviewPage"
+
+
 import Footer from "../component/Footer"
 import { SiViaplay } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
-import Footer from "../component/Footer"
+
 
 const Home = () => {
 
