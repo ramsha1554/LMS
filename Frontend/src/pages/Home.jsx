@@ -1,5 +1,6 @@
 import Nav from "../component/Nav"
 import home from "../assets/home1.jpg"
+import Logos from "../component/Logos"
 import { SiViaplay } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
 
@@ -61,7 +62,7 @@ const Home = () => {
           </button>
 
         </div>
-
+<Logos />
       </div>
 
     </div>
