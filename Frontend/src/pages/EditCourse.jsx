@@ -4,11 +4,12 @@ import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 
 import { toast } from 'react-toastify';
+import { SERVER_URL } from "../lib/constants";
 
 function EditLecture() {
 
     const navigate = useNavigate()
-const serverUrl = "http://localhost:8000"
+    const serverUrl = SERVER_URL
     const { lectureId } = useParams()
 
     const [lectureTitle, setLectureTitle] = useState("")
@@ -76,8 +77,6 @@ const serverUrl = "http://localhost:8000"
              onSubmit={handleUpdateLecture}
             >
 
-                {/* Lecture Title */}
-
                 <div>
 
                     <label className='block text-sm font-medium mb-2'>
@@ -94,8 +93,6 @@ const serverUrl = "http://localhost:8000"
 
                 </div>
 
-                {/* Video Upload */}
-
                 <div>
 
                     <label className='block text-sm font-medium mb-2'>
@@ -111,8 +108,6 @@ const serverUrl = "http://localhost:8000"
 
                 </div>
 
-                {/* Preview Toggle */}
-
                 <div className='flex items-center gap-3'>
 
                     <input
@@ -126,8 +121,6 @@ const serverUrl = "http://localhost:8000"
                     </label>
 
                 </div>
-
-                {/* Submit Button */}
 
                 <button
                  type='submit'
@@ -145,3 +138,4 @@ const serverUrl = "http://localhost:8000"
 }
 
 export default EditLecture
+

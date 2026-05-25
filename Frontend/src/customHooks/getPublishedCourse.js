@@ -1,25 +1,30 @@
-import React from 'react'
-import { useEffect } from 'react'
-import axios from 'axios'
-import { serverUrl } from '../App'
-import { useDispatch } from 'react-redux'
-import { setCourseData } from '../redux/courseSlice'
+import React from "react";
+import { useEffect } from "react";
+import axios from "axios";
+import { SERVER_URL } from "../lib/constants";
+
+import { useDispatch } from "react-redux";
+import { setCourseData } from "../redux/courseSlice";
+
 const getPublishedCourse = () => {
- const dispatch = useDispatch()
-    useEffect(()=>{
-       const getCourseData = async () => {
-        try {
-            const result = await axios.get(serverUrl + "/api/course/getpublished" , {withCredentials:true})
-             dispatch(setCourseData(result.data))
-             console.log(result.data)
-        } catch (error) {
-            console.log(error)
-        }
-        
-       }
-       getCourseData()
-    },[])
+  const dispatch = useDispatch();
 
-}
+  useEffect(() => {
+    const getCourseData = async () => {
+      try {
+        const result = await axios.get(
+          SERVER_URL + "/api/course/getpublished",
+          { withCredentials: true },
+        );
+        dispatch(setCourseData(result.data));
+        console.log(result.data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
 
-export default getPublishedCourse
+    getCourseData();
+  }, []);
+};
+
+export default getPublishedCourse;
