@@ -9,8 +9,14 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
 import ForgetPassword from "./pages/ForgetPassword";
+import AllCourses from "./pages/AllCourses";
+import ViewCourse from "./pages/ViewCourse";
+import CreateCourses from "./pages/CreateCourses";
+import EditCourse from "./pages/EditCourse";
+import CreateLecture from "./pages/CreateLecture";
+import EditLecture from "./pages/EditLecture";  
  
-<Route path="/allcourses" element={<AllCourses />} />
+
 const App = () => {
   const { userData } = useSelector((state) => state.user);
 
@@ -27,8 +33,15 @@ const App = () => {
         <Route path="/signup" element={<Signup />} />
          <Route path="/forget" element={<ForgetPassword />} />
 
-         
+
           <Route path="/allcourses" element={<AllCourses />} />
+          <Route path="/course/:courseId" element={<ViewCourse />} />
+          
+          <Route path="/createcourse" element={<CreateCourses />} />  
+          <Route path="/editcourse/:courseId" element={<EditCourse />} />
+          <Route path="/createlecture/:courseId" element={<CreateLecture />} />
+          <Route path="/editlecture/:courseId/:lectureId" element={<EditLecture />} />
+
        
       </Routes>
     </>
