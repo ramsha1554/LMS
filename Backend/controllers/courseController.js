@@ -197,5 +197,17 @@ export const getCreatorById = async (req,res) => {
     } catch (error) {
         return res.status(500).json({message:`Failed to get Creator ${error}`})
     }
+
+
+    
+
+
+
+
+
+
+
+
+    
     
 }
