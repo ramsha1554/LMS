@@ -1,9 +1,9 @@
-const express = require('express');
-const isAuth = require('../middleware/isAuth.js');
-const getCurrentUser = require('../controllers/userController.js');
+import express from "express";
+import isAuth from "../middleware/isAuth.js";
+import getCurrentUser from "../controllers/userController.js";
+
 const userRouter = express.Router();
 
+userRouter.get("/getcurrentuser", isAuth, getCurrentUser);
 
-userRouter.get('/getcurrentuser', isAuth, getCurrentUser);
-
-module.exports = userRouter;
+export default userRouter;
