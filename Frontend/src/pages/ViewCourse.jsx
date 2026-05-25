@@ -1,10 +1,12 @@
 import React from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 function ViewCourse() {
 
     const navigate = useNavigate()
+
+    const { courseId } = useParams()
 
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
@@ -19,6 +21,10 @@ function ViewCourse() {
             <h1 className='text-3xl font-bold'>
                 Course Details
             </h1>
+
+            <p className='text-gray-500 mt-2'>
+                Course ID: {courseId}
+            </p>
 
         </div>
 
