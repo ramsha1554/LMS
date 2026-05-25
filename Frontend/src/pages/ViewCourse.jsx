@@ -94,9 +94,18 @@ function ViewCourse() {
 
                     </ul>
 
-                    <button className='bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 cursor-pointer'>
-                        Enroll Now
-                    </button>
+   <button
+ className='bg-black text-white px-6 py-2 rounded-lg hover:bg-gray-800 cursor-pointer'
+ onClick={()=>setIsEnrolled(true)}
+>
+
+    {
+        isEnrolled
+        ? "Continue Learning"
+        : "Enroll Now"
+    }
+
+</button>                 
 
                 </div>
 
