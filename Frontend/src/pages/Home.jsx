@@ -7,7 +7,7 @@ import ExploreCourses from "../component/ExploreCourses"
 import ReviewPage from "../component/ReviewPage"
 
 
-import Footer from "../component/Footer"~
+import Footer from "../component/Footer"
 import { SiViaplay } from "react-icons/si";
 import { useNavigate } from "react-router-dom";
 
