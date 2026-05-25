@@ -2,11 +2,11 @@ import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { serverUrl } from '../App';
+
 import { toast } from 'react-toastify';
 
 function CreateLecture() {
-
+const serverUrl = "http://localhost:8000"
     const navigate = useNavigate()
 
     const { courseId } = useParams()
