@@ -2,6 +2,7 @@ import React from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import img from "../assets/empty.jpg"
 
 function ViewCourse() {
 
@@ -25,13 +26,35 @@ function ViewCourse() {
              onClick={()=>navigate("/")}
             />
 
-            <h1 className='text-3xl font-bold'>
-                {selectedCourse?.title}
-            </h1>
+            <div className='flex flex-col md:flex-row gap-6'>
 
-            <p className='text-gray-500 mt-2'>
-                {selectedCourse?.category}
-            </p>
+                <div className='w-full md:w-1/2'>
+
+                    <img
+                     src={selectedCourse?.thumbnail || img}
+                     alt=""
+                     className='rounded-xl w-full object-cover'
+                    />
+
+                </div>
+
+                <div className='flex-1 space-y-4'>
+
+                    <h1 className='text-3xl font-bold'>
+                        {selectedCourse?.title}
+                    </h1>
+
+                    <p className='text-gray-500'>
+                        {selectedCourse?.category}
+                    </p>
+
+                    <p className='text-2xl font-semibold'>
+                        ₹{selectedCourse?.price}
+                    </p>
+
+                </div>
+
+            </div>
 
         </div>
 
