@@ -119,5 +119,36 @@ try { await res.clearCookie('token');
 
 }
 
-module.exports = {SignUp, Login, Logout};
+const sendOtp = async (req, res) => {
+  try {
+    const { email } = req.body;
+    const user = await User.findOne({ email });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }   
+    const otp = Math.floor(100000 + Math.random() * 900000).toString();
+    const otpExpiry = Date.now() + 5 * 60 * 1000;
+    user.resetotp = otp;
+    user.otpExpiry = otpExpiry;
+    user.isOtpVerified = false;
+    await user.save();
+
+    await sendMail(email, otp);
+
+    res.status(200).json({ message: 'OTP sent to email' });
+  }
+    catch (error) {
+    res.status(500).json({
+        message: 'Failed to send OTP',
+        error: error.message
+    });
+    }
+}
+
+
+
+
+
+
+module.exports = {SignUp, Login, Logout, sendOtp};
 
