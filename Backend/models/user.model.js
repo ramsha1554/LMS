@@ -17,7 +17,7 @@ enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }],
 
   
 
-    enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Course' }], 
+   
 
     resetotp:{ type: String },
     otpExpiry:{ type: Date },   
