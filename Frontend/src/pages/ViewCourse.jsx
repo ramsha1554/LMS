@@ -135,7 +135,7 @@ function ViewCourse() {
                                 <button
                                  key={index}
 
-                                 disabled={!lecture.isPreviewFree}
+                            disabled={!lecture.isPreviewFree && !isEnrolled}
 
                                  onClick={()=>{
                                     if(lecture.isPreviewFree){
