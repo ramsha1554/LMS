@@ -1,60 +1,53 @@
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { serverUrl } from '../App';
 import { toast } from 'react-toastify';
 
-function EditCourse() {
+function EditLecture() {
 
     const navigate = useNavigate()
 
-    const { courseId } = useParams()
+    const { lectureId } = useParams()
 
-    const { creatorCourseData } = useSelector(state => state.course)
+    const [lectureTitle, setLectureTitle] = useState("")
+    const [video, setVideo] = useState(null)
+    const [isPreviewFree, setIsPreviewFree] = useState(false)
 
-    const selectedCourse = creatorCourseData?.find(
-        course => course._id === courseId
-    )
-
-    const [title, setTitle] = useState(
-        selectedCourse?.title || ""
-    )
-
-    const [subTitle, setSubTitle] = useState(
-        selectedCourse?.subTitle || ""
-    )
-
-    const [category, setCategory] = useState(
-        selectedCourse?.category || ""
-    )
-
-    const handleUpdateCourse = async (e) => {
+    const handleUpdateLecture = async (e) => {
 
         e.preventDefault()
 
         try {
 
-            const updatedData = {
-                title,
-                subTitle,
-                category
+            const formData = new FormData()
+
+            formData.append("lectureTitle", lectureTitle)
+            formData.append("isPreviewFree", isPreviewFree)
+
+            if(video){
+                formData.append("video", video)
             }
 
             await axios.put(
-                `${serverUrl}/api/course/editcourse/${courseId}`,
-                updatedData,
-                { withCredentials: true }
+                `${serverUrl}/api/course/editlecture/${lectureId}`,
+                formData,
+                {
+                    withCredentials: true,
+                    headers:{
+                        "Content-Type":"multipart/form-data"
+                    }
+                }
             )
 
-            toast.success("Course updated successfully")
+            toast.success("Lecture updated successfully")
 
         } catch (error) {
 
             console.log(error)
 
-            toast.error("Failed to update course")
+            toast.error("Failed to update lecture")
 
         }
 
@@ -63,91 +56,74 @@ function EditCourse() {
   return (
     <div className='min-h-screen bg-gray-50 p-6'>
 
-        <div className='max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6'>
+        <div className='max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6'>
 
             <FaArrowLeftLong
              className='text-black w-[22px] h-[22px] cursor-pointer mb-5'
-             onClick={()=>navigate("/")}
+             onClick={()=>navigate(-1)}
             />
 
             <h1 className='text-3xl font-bold'>
-                Edit Course
+                Edit Lecture
             </h1>
 
             <p className='text-gray-500 mt-2 mb-8'>
-                Update your course information.
+                Update lecture information and content.
             </p>
 
             <form
              className='space-y-5'
-             onSubmit={handleUpdateCourse}
+             onSubmit={handleUpdateLecture}
             >
 
-                {/* Course Title */}
+                {/* Lecture Title */}
 
                 <div>
 
                     <label className='block text-sm font-medium mb-2'>
-                        Course Title
+                        Lecture Title
                     </label>
 
                     <input
                      type="text"
-                     value={title}
-                     onChange={(e)=>setTitle(e.target.value)}
+                     value={lectureTitle}
+                     onChange={(e)=>setLectureTitle(e.target.value)}
+                     placeholder='Update lecture title'
                      className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
                     />
 
                 </div>
 
-                {/* Subtitle */}
+                {/* Video Upload */}
 
                 <div>
 
                     <label className='block text-sm font-medium mb-2'>
-                        Course Subtitle
+                        Upload Lecture Video
                     </label>
 
                     <input
-                     type="text"
-                     value={subTitle}
-                     onChange={(e)=>setSubTitle(e.target.value)}
-                     className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
+                     type="file"
+                     accept='video/*'
+                     onChange={(e)=>setVideo(e.target.files[0])}
+                     className='w-full border border-gray-300 rounded-lg px-4 py-3'
                     />
 
                 </div>
 
-                {/* Category */}
+                {/* Preview Toggle */}
 
-                <div>
+                <div className='flex items-center gap-3'>
 
-                    <label className='block text-sm font-medium mb-2'>
-                        Category
+                    <input
+                     type="checkbox"
+                     checked={isPreviewFree}
+                     onChange={(e)=>setIsPreviewFree(e.target.checked)}
+                    />
+
+                    <label className='text-sm font-medium'>
+                        Make this lecture free preview
                     </label>
-
-                    <select
-                     value={category}
-                     onChange={(e)=>setCategory(e.target.value)}
-                     className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
-                    >
-
-                        <option value="">
-                            Select Category
-                        </option>
-
-                        <option value="Web Development">
-                            Web Development
-                        </option>
-
-                        <option value="AI/ML">
-                            AI/ML
-                        </option>
-
-                        <option value="Data Science">
-                            Data Science
-                        </option>
-
-                    </select>
 
                 </div>
 
@@ -157,7 +133,7 @@ function EditCourse() {
                  type='submit'
                  className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer'
                 >
-                    Save Changes
+                    Save Lecture
                 </button>
 
             </form>
@@ -168,4 +144,4 @@ function EditCourse() {
   )
 }
 
-export default EditCourse
+export default EditLecture
