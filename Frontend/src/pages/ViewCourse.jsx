@@ -19,7 +19,30 @@ function ViewCourse() {
     const [selectedLecture, setSelectedLecture] = useState(null)
     const [isEnrolled, setIsEnrolled] = useState(false)
 
+    const loadRazorpayScript = () => {
+
+    return new Promise((resolve) => {
+
+        const script = document.createElement("script")
+
+        script.src = "https://checkout.razorpay.com/v1/checkout.js"
+
+        script.onload = () => {
+            resolve(true)
+        }
+
+        script.onerror = () => {
+            resolve(false)
+        }
+
+        document.body.appendChild(script)
+
+    })
+
+}
+
   return (
+    
     <div className='min-h-screen bg-gray-50 p-6'>
 
         <div className='max-w-6xl mx-auto bg-white rounded-xl shadow-md p-6 space-y-8'>
