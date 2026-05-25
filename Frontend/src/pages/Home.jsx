@@ -62,9 +62,10 @@ const Home = () => {
           </button>
 
         </div>
-<Logos />
+
       </div>
 
+  <Logos />
     </div>
 
   )
