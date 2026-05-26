@@ -7,6 +7,12 @@ function EditCourse() {
     const navigate = useNavigate()
     const { courseId } = useParams()
      const [selectCourse, setSelectCourse] = useState(null)
+      const [title, setTitle] = useState("")
+    const [subTitle, setSubTitle] = useState("")
+    const [description, setDescription] = useState("")
+    const [category, setCategory] = useState("")
+    const [level, setLevel] = useState("")
+    const [price, setPrice] = useState("")
 
     return (
         <div className='max-w-5xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md'>
@@ -28,6 +34,54 @@ function EditCourse() {
                 <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
                 <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
                 </form>
+                  <div>
+                        <label htmlFor="title" className='block text-sm font-medium text-gray-700 mb-1'>Title</label>
+                        <input id='title' type="text" className='w-full border px-4 py-2 rounded-md' placeholder='CourseTitle'
+                            onChange={(e) => setTitle(e.target.value)} value={title} />
+                    </div>
+                    <div>
+                        <label htmlFor="subtitle" className='block text-sm font-medium text-gray-700 mb-1'>Subtitle</label>
+                        <input id='subtitle' type="text" className='w-full border px-4 py-2 rounded-md' placeholder='Course Subtitle'
+                            onChange={(e) => setSubTitle(e.target.value)} value={subTitle} />
+                    </div>
+                    <div>
+                        <label htmlFor="des" className='block text-sm font-medium text-gray-700 mb-1'>Description</label>
+                        <textarea id='des' className='w-full border px-4 py-2 rounded-md h-24 resize-none' placeholder='Course Description'
+                            onChange={(e) => setDescription(e.target.value)} value={description}></textarea>
+                    </div>
+
+                    <div className='flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0'>
+                        <div className='flex-1'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>Course Category</label>
+                            <select className='w-full border px-4 py-2 rounded-md bg-white'
+                                onChange={(e) => setCategory(e.target.value)} value={category}>
+                                <option value="">Select Category</option>
+                                <option value="App Development">App Development</option>
+                                <option value="AI/ML">AI/ML</option>
+                                <option value="AI Tools">AI Tools</option>
+                                <option value="Data Science">Data Science</option>
+                                <option value="Data Analytics">Data Analytics</option>
+                                <option value="Ethical Hacking">Ethical Hacking</option>
+                                <option value="UI UX Designing">UI UX Designing</option>
+                                <option value="Web Development">Web Development</option>
+                                <option value="Others">Others</option>
+                            </select>
+                        </div>
+                        <div className='flex-1'>
+                            <label className='block text-sm font-medium text-gray-700 mb-1'>Course Level</label>
+                            <select className='w-full border px-4 py-2 rounded-md bg-white'
+                                onChange={(e) => setLevel(e.target.value)} value={level}>
+                                <option value="">Select Level</option>
+                                <option value="Beginner">Beginner</option>
+                                <option value="Intermediate">Intermediate</option>
+                                <option value="Advanced">Advanced</option>
+                            </select>
+                        </div>
+                        <div className='flex-1'>
+                            <label htmlFor="price" className='block text-sm font-medium text-gray-700 mb-1'>Course Price (INR)</label>
+                            <input type="number" id="price" className='w-full border px-4 py-2 rounded-md' placeholder='₹'
+                                onChange={(e) => setPrice(e.target.value)} value={price} />
+                        </div>
             </div>
         
         </div>
