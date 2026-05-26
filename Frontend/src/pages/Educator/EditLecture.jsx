@@ -1,7 +1,11 @@
 import React, { useState } from 'react'
+import axios from 'axios';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { serverUrl } from '../../App';
+import { setLectureData } from '../../redux/lectureSlice';
+import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
 
 function EditLecture() {
@@ -14,6 +18,27 @@ function EditLecture() {
     const [isPreviewFree, setIsPreviewFree] = useState(false)
     const [loading, setLoading] = useState(false)
     const [loading1, setLoading1] = useState(false)
+    const dispatch = useDispatch()
+
+    const handleEditLecture = async () => {
+        setLoading(true)
+        const formdata = new FormData()
+        formdata.append("lectureTitle", lectureTitle)
+        formdata.append("videoUrl", videoUrl)
+        formdata.append("isPreviewFree", isPreviewFree)
+        try {
+            const result = await axios.post(serverUrl + `/api/course/editlecture/${lectureId}`, formdata, { withCredentials: true })
+            console.log(result.data)
+            dispatch(setLectureData([...lectureData, result.data]))
+            toast.success("Lecture Updated")
+            navigate("/courses")
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+        } finally {
+            setLoading(false)
+        }
+    }
 
     return (
         <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
@@ -24,8 +49,6 @@ function EditLecture() {
                     <h2 className='text-xl font-semibold text-gray-800'>Update Course Lecture</h2>
                 </div>
 
-                {/* 
-                Remove  */}
                 <button className='mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all text-sm'
                     disabled={loading1}>
                     {loading1 ? <ClipLoader size={30} color='white' /> : "Remove Lecture"}
@@ -50,14 +73,12 @@ function EditLecture() {
                             onChange={() => setIsPreviewFree(prev => !prev)} />
                         <label htmlFor="isFree" className='text-sm text-gray-700'>Is this Video FREE</label>
                     </div>
-
                     {loading ? <p>Uploading video... Please wait.</p> : ""}
                 </div>
 
-                {/*  Update Lecture button */}
                 <div className='pt-4'>
                     <button className='w-full bg-black text-white py-3 rounded-md text-sm font-medium hover:bg-gray-700 transition'
-                        disabled={loading}>
+                        disabled={loading} onClick={handleEditLecture}>
                         {loading ? <ClipLoader size={30} color='white' /> : "Update Lecture"}
                     </button>
                 </div>
