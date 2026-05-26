@@ -40,6 +40,21 @@ function EditLecture() {
         }
     }
 
+    const removeLecture = async () => {
+        setLoading1(true)
+        try {
+            const result = await axios.delete(serverUrl + `/api/course/removelecture/${lectureId}`, { withCredentials: true })
+            console.log(result.data)
+            navigate(`/createLecture/${courseId}`)
+            toast.success("Lecture Removed")
+        } catch (error) {
+            console.log(error)
+            toast.error(error.response.data.message)
+        } finally {
+            setLoading1(false)
+        }
+    }
+
     return (
         <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
             <div className='w-full max-w-xl bg-white rounded-xl shadow-lg p-6 space-y-6'>
@@ -50,7 +65,7 @@ function EditLecture() {
                 </div>
 
                 <button className='mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all text-sm'
-                    disabled={loading1}>
+                    disabled={loading1} onClick={removeLecture}>
                     {loading1 ? <ClipLoader size={30} color='white' /> : "Remove Lecture"}
                 </button>
 
