@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { ClipLoader } from 'react-spinners';
 
 function EditLecture() {
     const { courseId, lectureId } = useParams()
@@ -11,6 +12,8 @@ function EditLecture() {
     const [lectureTitle, setLectureTitle] = useState(selectedLecture?.lectureTitle)
     const [videoUrl, setVideoUrl] = useState("")
     const [isPreviewFree, setIsPreviewFree] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [loading1, setLoading1] = useState(false)
 
     return (
         <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
@@ -21,6 +24,13 @@ function EditLecture() {
                     <h2 className='text-xl font-semibold text-gray-800'>Update Course Lecture</h2>
                 </div>
 
+                {/* 
+                Remove  */}
+                <button className='mt-2 px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-all text-sm'
+                    disabled={loading1}>
+                    {loading1 ? <ClipLoader size={30} color='white' /> : "Remove Lecture"}
+                </button>
+
                 <div className='space-y-4'>
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>Lecture Title *</label>
@@ -28,7 +38,6 @@ function EditLecture() {
                             className='w-full p-3 border border-gray-300 rounded-md text-sm focus:ring-2 focus:ring-[black] focus:outline-none'
                             required onChange={(e) => setLectureTitle(e.target.value)} value={lectureTitle} />
                     </div>
-
                     <div>
                         <label className='block text-sm font-medium text-gray-700 mb-1'>Video *</label>
                         <input type="file"
@@ -36,12 +45,21 @@ function EditLecture() {
                             required accept='video/*'
                             onChange={(e) => setVideoUrl(e.target.files[0])} />
                     </div>
-
                     <div className='flex items-center gap-3'>
                         <input type="checkbox" className='accent-[black] h-4 w-4' id='isFree'
                             onChange={() => setIsPreviewFree(prev => !prev)} />
                         <label htmlFor="isFree" className='text-sm text-gray-700'>Is this Video FREE</label>
                     </div>
+
+                    {loading ? <p>Uploading video... Please wait.</p> : ""}
+                </div>
+
+                {/*  Update Lecture button */}
+                <div className='pt-4'>
+                    <button className='w-full bg-black text-white py-3 rounded-md text-sm font-medium hover:bg-gray-700 transition'
+                        disabled={loading}>
+                        {loading ? <ClipLoader size={30} color='white' /> : "Update Lecture"}
+                    </button>
                 </div>
 
             </div>
