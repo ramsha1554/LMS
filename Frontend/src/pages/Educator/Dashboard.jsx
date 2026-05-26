@@ -1,5 +1,9 @@
 
 import { useSelector } from 'react-redux'
+import { Bar, BarChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts"
+
+
+
 
 function Dashboard() {
     const navigate = useNavigate()
@@ -17,6 +21,12 @@ function Dashboard() {
         return sum + courseRevenue;
     }, 0) || 0
 
+
+     const CourseProgressData = creatorCourseData?.map((course) => ({
+        name: course.title?.slice(0, 10) + "...",
+        lectures: course.lectures?.length || 0
+    })) || [];
+    
 
 
     return (
