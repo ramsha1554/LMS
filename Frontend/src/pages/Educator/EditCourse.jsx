@@ -1,10 +1,12 @@
 import React from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
+import { useState } from 'react';
 
 function EditCourse() {
     const navigate = useNavigate()
     const { courseId } = useParams()
+     const [selectCourse, setSelectCourse] = useState(null)
 
     return (
         <div className='max-w-5xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md'>
@@ -14,7 +16,20 @@ function EditCourse() {
                 <h2 className='text-2xl font-semibold md:pl-[60px]'>
                     Add Detail Information regarding the Course
                 </h2>
+ <div className='space-x-2 space-y-2'>
+                    <button className='bg-black text-white px-4 py-2 rounded-md'
+                        onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>
+                        Go to Lecture page
+                    </button>
+                </div>
+
             </div>
+            <div className='bg-gray-50 p-6 rounded-md'>
+                <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
+                <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
+                </form>
+            </div>
+        
         </div>
     )
 }
