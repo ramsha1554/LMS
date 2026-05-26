@@ -1,74 +1,48 @@
-import User from "../model/userModel.js"
-import Course from "../model/courseModel.js"
-import RazorPayInstance from "../config/razorpay.js"
+import User from "../models/user.model.js";
+import Course from "../models/courseModel.js";
 
-export const verifyPayment = async (req,res) => {
+import RazorPayInstance from "../config/razorpay.js";
 
-    try {
+export const verifyPayment = async (req, res) => {
+  try {
+    const {
+      courseId,
 
-        const {
+      userId,
 
-            courseId,
+      razorpay_order_id,
+    } = req.body;
 
-            userId,
+    const orderInfo = await RazorPayInstance.orders.fetch(razorpay_order_id);
 
-            razorpay_order_id
+    if (orderInfo.status === "paid") {
+      const user = await User.findById(userId);
 
-        } = req.body
+      if (!user.enrolledCourses.includes(courseId)) {
+        user.enrolledCourses.push(courseId);
 
-        const orderInfo = await RazorPayInstance.orders.fetch(
-            razorpay_order_id
-        )
+        await user.save();
+      }
 
-        if(orderInfo.status === 'paid'){
+      const course = await Course.findById(courseId);
 
-            const user = await User.findById(userId)
+      if (!course.enrolledStudents.includes(userId)) {
+        course.enrolledStudents.push(userId);
 
-            if(!user.enrolledCourses.includes(courseId)){
+        await course.save();
+      }
 
-                user.enrolledCourses.push(courseId)
-
-                await user.save()
-
-            }
-
-            const course = await Course.findById(courseId)
-
-            if(!course.enrolledStudents.includes(userId)){
-
-                course.enrolledStudents.push(userId)
-
-                await course.save()
-
-            }
-
-            return res.status(200).json({
-
-                message:"Payment verified and enrollment successful"
-
-            })
-
-        }
-
-        else{
-
-            return res.status(400).json({
-
-                message:"Payment failed"
-
-            })
-
-        }
-
-    } catch (error) {
-
-        return res.status(500).json({
-
-            message:`Internal server error during payment verification ${error}`
-
-        })
-
+      return res.status(200).json({
+        message: "Payment verified and enrollment successful",
+      });
+    } else {
+      return res.status(400).json({
+        message: "Payment failed",
+      });
     }
-
-}
- 
+  } catch (error) {
+    return res.status(500).json({
+      message: `Internal server error during payment verification ${error}`,
+    });
+  }
+};
