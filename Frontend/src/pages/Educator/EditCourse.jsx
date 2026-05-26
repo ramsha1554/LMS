@@ -6,8 +6,8 @@ import { useState } from 'react';
 function EditCourse() {
     const navigate = useNavigate()
     const { courseId } = useParams()
-     const [selectCourse, setSelectCourse] = useState(null)
-      const [title, setTitle] = useState("")
+    const [selectCourse, setSelectCourse] = useState(null)
+    const [title, setTitle] = useState("")
     const [subTitle, setSubTitle] = useState("")
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("")
@@ -22,28 +22,31 @@ function EditCourse() {
                 <h2 className='text-2xl font-semibold md:pl-[60px]'>
                     Add Detail Information regarding the Course
                 </h2>
- <div className='space-x-2 space-y-2'>
+                <div className='space-x-2 space-y-2'>
                     <button className='bg-black text-white px-4 py-2 rounded-md'
                         onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>
                         Go to Lecture page
                     </button>
                 </div>
-
             </div>
+
             <div className='bg-gray-50 p-6 rounded-md'>
                 <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
                 <form className='space-y-6' onSubmit={(e) => e.preventDefault()}>
-                </form>
-                  <div>
+
+                  
+                    <div>
                         <label htmlFor="title" className='block text-sm font-medium text-gray-700 mb-1'>Title</label>
                         <input id='title' type="text" className='w-full border px-4 py-2 rounded-md' placeholder='CourseTitle'
                             onChange={(e) => setTitle(e.target.value)} value={title} />
                     </div>
+
                     <div>
                         <label htmlFor="subtitle" className='block text-sm font-medium text-gray-700 mb-1'>Subtitle</label>
                         <input id='subtitle' type="text" className='w-full border px-4 py-2 rounded-md' placeholder='Course Subtitle'
                             onChange={(e) => setSubTitle(e.target.value)} value={subTitle} />
                     </div>
+
                     <div>
                         <label htmlFor="des" className='block text-sm font-medium text-gray-700 mb-1'>Description</label>
                         <textarea id='des' className='w-full border px-4 py-2 rounded-md h-24 resize-none' placeholder='Course Description'
@@ -82,8 +85,10 @@ function EditCourse() {
                             <input type="number" id="price" className='w-full border px-4 py-2 rounded-md' placeholder='₹'
                                 onChange={(e) => setPrice(e.target.value)} value={price} />
                         </div>
+                    </div>
+
+                </form>
             </div>
-        
         </div>
     )
 }
