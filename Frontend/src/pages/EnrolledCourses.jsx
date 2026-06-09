@@ -1,93 +1,75 @@
-import React from 'react'
+import React from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import img from "../assets/empty.jpg"
+import img from "../assets/empty.jpg";
 
 function EnrolledCourses() {
+  const navigate = useNavigate();
+  const { courseData } = useSelector(state => state.course);
+  const { userData } = useSelector(state => state.user);
 
-    const navigate = useNavigate()
-
-    const { courseData } = useSelector(state => state.course)
+  // Filter only courses the user is enrolled in
+  const enrolledCourses = courseData?.filter(course =>
+    userData?.enrolledCourses?.some(
+      id => id === course._id || id?._id === course._id
+    )
+  ) ?? [];
 
   return (
     <div className='min-h-screen bg-gray-100 p-6'>
+      <div className='max-w-7xl mx-auto'>
+        <h1 className='text-3xl font-bold mb-8'>My Learning</h1>
 
-        <div className='max-w-7xl mx-auto'>
-
-            <h1 className='text-3xl font-bold mb-8'>
-                My Learning
-            </h1>
-
-            <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
-
-                {
-                    courseData?.map((course,index)=>(
-
-                        <div
-                         key={index}
-                         className='bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-200'
-                         onClick={()=>{
-                            navigate(`/viewcourse/${course._id}`)
-                         }}
-                        >
-
-                            <img
-                             src={course?.thumbnail || img}
-                             alt=""
-                             className='w-full h-[200px] object-cover'
-                            />
-
-                            <div className='p-5 space-y-2'>
-
-                                <h2 className='text-xl font-semibold'>
-                                    {course?.title}
-                                </h2>
-
-                                <p className='text-gray-500 text-sm'>
-                                    {course?.category}
-                                </p>
-
-                               <div className='space-y-3 pt-2'>
-
-    <div className='flex items-center justify-between'>
-
-        <span className='text-sm text-gray-500'>
-            {course?.lectures?.length || 0} Lectures
-        </span>
-
-        <span className='text-sm text-gray-500'>
-            40% Completed
-        </span>
-
+        {enrolledCourses.length === 0 ? (
+          <div className='flex flex-col items-center justify-center py-24 text-gray-400'>
+            <p className='text-lg font-medium'>You haven't enrolled in any courses yet.</p>
+            <button
+              onClick={() => navigate('/allcourses')}
+              className='mt-4 bg-black text-white px-6 py-2 rounded-lg text-sm'
+            >
+              Browse Courses
+            </button>
+          </div>
+        ) : (
+          <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6'>
+            {enrolledCourses.map((course, index) => (
+              <div
+                key={index}
+                className='bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-200'
+                onClick={() => navigate(`/course/${course._id}`)}
+              >
+                <img
+                  src={course?.thumbnail || img}
+                  alt=""
+                  className='w-full h-[200px] object-cover'
+                />
+                <div className='p-5 space-y-2'>
+                  <h2 className='text-xl font-semibold'>{course?.title}</h2>
+                  <p className='text-gray-500 text-sm'>{course?.category}</p>
+                  <div className='space-y-3 pt-2'>
+                    <div className='flex items-center justify-between'>
+                      <span className='text-sm text-gray-500'>
+                        {course?.lectures?.length || 0} Lectures
+                      </span>
+                    </div>
+                    <button
+                      className='bg-black text-white px-4 py-2 rounded-lg text-sm w-full'
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        navigate(`/course/${course._id}`);
+                      }}
+                    >
+                      Continue Learning
+                    </button>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
-
-    {/* Progress Bar */}
-
-    <div className='w-full bg-gray-200 rounded-full h-2 overflow-hidden'>
-
-        <div className='bg-black h-full w-[40%]'></div>
-
-    </div>
-
-    <button className='bg-black text-white px-4 py-2 rounded-lg text-sm w-full'>
-        Continue Learning
-    </button>
-
-</div>
-
-                            </div>
-
-                        </div>
-
-                    ))
-                }
-
-            </div>
-
-        </div>
-
-    </div>
-  )
+  );
 }
 
-export default EnrolledCourses
+export default EnrolledCourses;
