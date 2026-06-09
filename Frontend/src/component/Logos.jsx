@@ -1,60 +1,35 @@
-import React from 'react'
-import { MdCastForEducation } from "react-icons/md";
-import { SiOpenaccess } from "react-icons/si";
-import { FaSackDollar } from "react-icons/fa6";
-import { BiSupport } from "react-icons/bi";
-import { FaUsers } from "react-icons/fa";
+import React from "react";
+import { BookOpen, Unlock, CreditCard, HelpCircle, Users } from "lucide-react";
 
 function Logos() {
-
   return (
-
-    <div className='w-[100vw] min-h-[90px] flex items-center justify-center flex-wrap gap-4 md:mb-[50px]'>
-
-      <div className='flex items-center justify-center gap-2 px-5 py-3 rounded-3xl bg-gray-200 cursor-pointer text-[#03394b]'>
-
-        <MdCastForEducation className='w-[35px] h-[35px] fill-[#03394b]' />
-
-        20k+ online Courses
-
+    <div className="w-full min-h-[90px] flex items-center justify-center flex-wrap gap-4 py-8 bg-neutral-50 border-b border-neutral-150">
+      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full cursor-pointer text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition-colors duration-200 shadow-sm">
+        <BookOpen className="w-4 h-4 text-neutral-900" />
+        <span>20k+ Online Courses</span>
       </div>
 
-      <div className='flex items-center justify-center gap-2 px-5 py-3 rounded-3xl bg-gray-200 cursor-pointer text-[#03394b]'>
-
-        <SiOpenaccess className='w-[35px] h-[35px] fill-[#03394b]' />
-
-        Lifetime Access
-
+      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full cursor-pointer text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition-colors duration-200 shadow-sm">
+        <Unlock className="w-4 h-4 text-neutral-900" />
+        <span>Lifetime Access</span>
       </div>
 
-      <div className='flex items-center justify-center gap-2 px-5 py-3 rounded-3xl bg-gray-200 cursor-pointer text-[#03394b]'>
-
-        <FaSackDollar className='w-[35px] h-[35px] fill-[#03394b]' />
-
-        Value for money
-
+      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full cursor-pointer text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition-colors duration-200 shadow-sm">
+        <CreditCard className="w-4 h-4 text-neutral-900" />
+        <span>Value for Money</span>
       </div>
 
-      <div className='flex items-center justify-center gap-2 px-5 py-3 rounded-3xl bg-gray-200 cursor-pointer text-[#03394b]'>
-
-        <BiSupport className='w-[35px] h-[35px] fill-[#03394b]' />
-
-        Lifetime Support
-
+      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full cursor-pointer text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition-colors duration-200 shadow-sm">
+        <HelpCircle className="w-4 h-4 text-neutral-900" />
+        <span>Lifetime Support</span>
       </div>
 
-      <div className='flex items-center justify-center gap-2 px-5 py-3 rounded-3xl bg-gray-200 cursor-pointer text-[#03394b]'>
-
-        <FaUsers className='w-[35px] h-[35px] fill-[#03394b]' />
-
-        Community Support
-
+      <div className="flex items-center justify-center gap-2 px-4 py-2 bg-white border border-neutral-200 rounded-full cursor-pointer text-neutral-800 text-sm font-medium hover:bg-neutral-50 transition-colors duration-200 shadow-sm">
+        <Users className="w-4 h-4 text-neutral-900" />
+        <span>Community Support</span>
       </div>
-
     </div>
-
-  )
-
+  );
 }
 
-export default Logos
+export default Logos;

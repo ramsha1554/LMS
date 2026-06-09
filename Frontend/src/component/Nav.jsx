@@ -1,5 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
-import { IoPersonCircle } from "react-icons/io5";
+import { User } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
@@ -26,7 +26,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/api/auth/logout", {
+      const res = await axios.get("http://localhost:5000/api/auth/logout", {
         withCredentials: true,
       });
       dispatch(setUserData(null));
@@ -34,11 +34,10 @@ const Navbar = () => {
         position: "top-right",
         autoClose: 3000,
         style: {
-          background: "#4caf50",
+          background: "#171717",
           color: "#fff",
-          fontWeight: "bold",
-          fontSize: "16px",
-          borderRadius: "10px",
+          fontSize: "14px",
+          borderRadius: "6px",
         },
       });
       navigate("/login");
@@ -47,12 +46,18 @@ const Navbar = () => {
       toast.error("Logout Failed!", {
         position: "top-right",
         autoClose: 3000,
+        style: {
+          background: "#171717",
+          color: "#fff",
+          fontSize: "14px",
+          borderRadius: "6px",
+        },
       });
     }
   };
 
   return (
-    <nav className="w-full h-[70px] bg-white text-gray-800 flex justify-between items-center px-8 fixed top-0 left-0 z-10 border-b border-gray-200">
+    <nav className="w-full h-[70px] bg-white text-neutral-800 flex justify-between items-center px-8 fixed top-0 left-0 z-10 border-b border-neutral-200">
       {/* LEFT SIDE: Logo + Title */}
       <div className="flex items-center gap-3">
         <div className="w-10 h-10 bg-black text-white rounded-full flex items-center justify-center font-bold text-lg">
@@ -67,23 +72,25 @@ const Navbar = () => {
       <div className="flex items-center gap-6">
         {/* Profile Menu */}
         <div className="relative" ref={menuRef}>
-          <IoPersonCircle
-            className="w-10 h-10 cursor-pointer text-gray-600 hover:text-black transition-colors"
+          <button
             onClick={() => setOpen(!open)}
-          />
+            className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 hover:text-black flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+          >
+            <User className="w-5 h-5" />
+          </button>
 
           {/* Smooth Dropdown */}
           <div
-            className={`absolute right-0 mt-2 w-44 bg-white shadow-lg rounded-lg overflow-hidden 
+            className={`absolute right-0 mt-2 w-44 bg-white border border-neutral-200 shadow-xl rounded-xl overflow-hidden 
               transform transition-all duration-200 origin-top
               ${open ? "scale-100 opacity-100" : "scale-95 opacity-0 pointer-events-none"}`}
           >
             <button
               onClick={() => {
                 setOpen(false);
-                navigate("/courses");
+navigate("/educator/courses")
               }}
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 transition"
+              className="w-full px-4 py-2.5 text-left text-sm text-neutral-700 hover:bg-neutral-50 hover:text-black transition-colors duration-200"
             >
                Courses
             </button>
@@ -92,7 +99,7 @@ const Navbar = () => {
                 setOpen(false);
                 navigate("/profile");
               }}
-              className="w-full px-4 py-2 text-left hover:bg-gray-100 transition"
+              className="w-full px-4 py-2.5 text-left text-sm text-neutral-700 hover:bg-neutral-50 hover:text-black transition-colors duration-200"
             >
              My Profile
             </button>
@@ -101,7 +108,10 @@ const Navbar = () => {
 
         {/* Educator Dashboard */}
         {userData?.role === "educator" && (
-          <button className="px-4 py-2 bg-black text-white rounded-md font-semibold transition-colors">
+          <button 
+            onClick={() => navigate("/educator/dashboard")}
+            className="px-4 py-2 bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-black"
+          >
             Dashboard
           </button>
         )}
@@ -109,14 +119,14 @@ const Navbar = () => {
         {/* Auth Buttons */}
         {!userData ? (
           <button
-            className="px-4 py-2 bg-gray-800 text-white rounded-md font-semibold hover:bg-black transition-colors"
+            className="px-4 py-2 bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-black"
             onClick={() => navigate("/login")}
           >
             Login
           </button>
         ) : (
           <button
-            className="px-4 py-2 bg-gray-800 text-white rounded-md font-semibold hover:bg-black transition-colors"
+            className="px-4 py-2 bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white rounded-md text-sm font-medium transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-black"
             onClick={handleLogout}
           >
             LogOut
