@@ -19,12 +19,16 @@ const app = express();
 const port = process.env.PORT || 3000;
 
 // Middleware
-
 app.use(
   cors({
-    origin: process.env.CORS_ORIGIN || "http://localhost:5173",
+    // Allow cookie-based auth for local dev across Vite ports.
+    origin: process.env.CORS_ORIGIN || [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
+    ],
     credentials: true,
-  })
+  }),
 );
 
 app.use(express.json());
@@ -34,42 +38,28 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // Routes
-
 app.use("/api/auth", authRouter);
-
 app.use("/api/user", userRouter);
-
 app.use("/api/course", courseRouter);
-
 app.use("/api/review", reviewRouter);
-
 app.use("/api/payment", paymentRouter);
 
 // Health Check
-
 app.get("/", (req, res) => {
   res.send("LMS Backend Running Successfully");
 });
 
 // Start Server
-
 const startServer = async () => {
   try {
-
     await connectDB();
 
     app.listen(port, () => {
-
       console.log(`Server running on port ${port}`);
-
     });
-
   } catch (error) {
-
     console.log("Server startup failed:", error);
-
     process.exit(1);
-
   }
 };
 
