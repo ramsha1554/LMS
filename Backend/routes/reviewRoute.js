@@ -1,8 +1,11 @@
+
 import express from "express";
-import { getReview } from "../controllers/reviewController.js";
+import { createReview, getReviews } from "../controllers/reviewController.js";
+import { isAuth } from "../middleware/isAuth.js";
 
-const reviewRouter = express.Router();
+const router = express.Router();
 
-reviewRouter.get("/getreview", getReview);
+router.post("/createreview", isAuth, createReview);
+router.get("/getreviews/:courseId", getReviews); // public — no auth needed to read reviews
 
-export default reviewRouter;
+export default router;
