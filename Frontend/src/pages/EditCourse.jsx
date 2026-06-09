@@ -10,7 +10,8 @@ function EditLecture() {
 
     const navigate = useNavigate()
     const serverUrl = SERVER_URL
-    const { lectureId } = useParams()
+    const { courseId, lectureId } = useParams()
+
 
     const [lectureTitle, setLectureTitle] = useState("")
     const [video, setVideo] = useState(null)

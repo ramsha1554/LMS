@@ -12,7 +12,20 @@ function EditLecture() {
     const { courseId, lectureId } = useParams()
     const navigate = useNavigate()
     const { lectureData } = useSelector(state => state.lecture)
-    const selectedLecture = lectureData.find(lecture => lecture._id === lectureId)
+const selectedLecture = lectureData.find(lecture => lecture._id === lectureId)
+
+    // Defensive: prevent /undefined requests
+    if (!lectureId || lectureId === "undefined") {
+        return (
+            <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+                <div className='bg-white rounded-xl shadow-lg p-6 text-center'>
+                    <h2 className='text-xl font-semibold text-gray-800'>Invalid lecture route</h2>
+                    <p className='text-gray-600 mt-2'>lectureId is missing from the URL.</p>
+                </div>
+            </div>
+        )
+    }
+
     const [lectureTitle, setLectureTitle] = useState(selectedLecture?.lectureTitle)
     const [videoUrl, setVideoUrl] = useState("")
     const [isPreviewFree, setIsPreviewFree] = useState(false)
@@ -31,7 +44,7 @@ function EditLecture() {
             console.log(result.data)
             dispatch(setLectureData([...lectureData, result.data]))
             toast.success("Lecture Updated")
-            navigate("/courses")
+navigate("/educator/courses")
         } catch (error) {
             console.log(error)
             toast.error(error.response.data.message)

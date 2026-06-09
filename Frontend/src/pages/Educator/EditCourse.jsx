@@ -12,19 +12,19 @@ function EditCourse() {
     const [description, setDescription] = useState("")
     const [category, setCategory] = useState("")
     const [level, setLevel] = useState("")
-    const [price, setPrice] = useState("")
+    const [price, setPrice] = useSnptate("")
 
     return (
         <div className='max-w-5xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md'>
             <div className='flex items-center justify-center gap-[20px] md:justify-between flex-col md:flex-row mb-6 relative'>
                 <FaArrowLeftLong className='top-[-20%] md:top-[20%] absolute left-[0] md:left-[2%] w-[22px] h-[22px] cursor-pointer'
-                    onClick={() => navigate("/courses")} />
+onClick={() => navigate("/educator/courses")} />
                 <h2 className='text-2xl font-semibold md:pl-[60px]'>
                     Add Detail Information regarding the Course
                 </h2>
                 <div className='space-x-2 space-y-2'>
                     <button className='bg-black text-white px-4 py-2 rounded-md'
-                        onClick={() => navigate(`/createlecture/${selectCourse?._id}`)}>
+onClick={() => navigate(`/createlecture/${courseId}`)}>
                         Go to Lecture page
                     </button>
                 </div>

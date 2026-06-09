@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import axios from 'axios';
 import { FaArrowLeftLong } from "react-icons/fa6";
@@ -78,7 +79,14 @@ function CreateLecture() {
                         <div key={index} className='bg-gray-100 rounded-md flex justify-between items-center p-3 text-sm font-medium text-gray-700'>
                             <span>Lecture - {index + 1} : {lecture.lectureTitle}</span>
                             <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer'
-                                onClick={() => navigate(`/editlecture/${courseId}/${lecture._id}`)} />
+onClick={() => {
+                            const id = lecture?._id ?? lecture?.id;
+                            if (!id) {
+                                toast.error("Lecture id missing (cannot edit)." );
+                                return;
+                            }
+                            navigate(`/editlecture/${courseId}/${id}`);
+                        }}
                         </div>
                     ))}
                 </div>
