@@ -19,6 +19,7 @@ const CreateCourses = React.lazy(() => import("./pages/Educator/CreateCourses"))
 const EditCourse = React.lazy(() => import("./pages/EditCourse"));
 const CreateLecture = React.lazy(() => import("./pages/CreateLecture"));
 const EditLecture = React.lazy(() => import("./pages/EditLecture"));
+const Profile = React.lazy(() => import("./pages/Profile"));
 const Dashboard = React.lazy(() => import("./pages/Educator/Dashboard"));
 
 const App = () => {
@@ -38,6 +39,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/forget" element={<ForgetPassword />} />
+          <Route path="/profile" element={<Profile />} />
 
           <Route path="/educator/courses" element={<Courses />} />
           <Route path="/allcourses" element={<AllCourses />} />
