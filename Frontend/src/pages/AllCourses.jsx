@@ -2,12 +2,12 @@ import React from "react";
 import Nav from "../component/Nav";
 import { useSelector } from "react-redux";
 import Card from "../component/Card";
-import getPublishedCourse from "../customHooks/getPublishedCourse";
+import usePublishedCourse from "../customHooks/usePublishedCourse";
 import { BookOpen } from "lucide-react";
 
 function AllCourses() {
   // FETCH COURSES
-  getPublishedCourse();
+  usePublishedCourse();
 
   // REDUX STATE
   const { courseData = [] } = useSelector((state) => state.course || {});

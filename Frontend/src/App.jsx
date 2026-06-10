@@ -5,8 +5,8 @@ import "react-toastify/dist/ReactToastify.css";
 import RequireAuth from "./components/RequireAuth";
 import RequireEducator from "./components/RequireEducator";
 
-import getCurrentUser from "./customHooks/getCurrentUser";
 import RouteFallback from "./components/RouteFallback";
+import useCurrentUser from "./customHooks/useCurrentUser";
 
 const Courses = React.lazy(() => import("./pages/Educator/Courses"));
 const ForgetPassword = React.lazy(() => import("./pages/ForgetPassword"));
@@ -25,7 +25,7 @@ const EnrolledCourses = React.lazy(() => import("./pages/EnrolledCourses"));
 const Dashboard = React.lazy(() => import("./pages/Educator/Dashboard"));
 
 const App = () => {
-  getCurrentUser();
+ useCurrentUser();
   return (
     <>
       <ToastContainer position="top-right" autoClose={5000} theme="light" />
