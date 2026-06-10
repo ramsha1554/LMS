@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
-import axiosClient from '../../lib/axiosClient';
+import axiosClient from '../lib/axiosClient';
 import { toast } from 'react-toastify';
 
 function EditCourse() {

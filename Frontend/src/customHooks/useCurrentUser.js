@@ -15,7 +15,7 @@ const useCurrentUser = () => {
       try {
         const result = await axiosClient.get("/api/user/getcurrentuser");
         dispatch(setUserData(result.data.user));
-      } catch (error) {
+      } catch {
         // If cookie is missing/expired/invalid, ensure redux reflects logged-out state.
         dispatch(setUserData(null));
       }
