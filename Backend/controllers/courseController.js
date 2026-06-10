@@ -191,7 +191,7 @@ export const editLecture = async (req, res) => {
     await lecture.save();
     return res.status(200).json(lecture);
   } catch (error) {
-    return res.status(500).json({ message: `failed to edit Lecture ${error}` });
+    console.error("EditLecture error:", error); return res.status(500).json({ message: `failed to edit Lecture ${error}` });
   }
 };
 
@@ -232,3 +232,19 @@ export const getCreatorById = async (req, res) => {
   }
 };
 
+
+
+export const togglePublish = async (req, res) => {
+  try {
+    const { courseId } = req.params;
+    const course = await Course.findById(courseId);
+    if (!course) return res.status(404).json({ message: "Course not found" });
+    if (course.creator.toString() !== req.userId)
+      return res.status(403).json({ message: "Unauthorized" });
+    course.isPublished = !course.isPublished;
+    await course.save();
+    return res.status(200).json({ message: course.isPublished ? "Course published" : "Course unpublished", isPublished: course.isPublished });
+  } catch (error) {
+    return res.status(500).json({ message: `togglePublish error ${error}` });
+  }
+};

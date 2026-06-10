@@ -11,6 +11,7 @@ import {
   getPublishedCourses,
   removeCourse,
   removeLecture,
+  togglePublish,
 } from "../controllers/courseController.js";
 import isAuth from "../middleware/isAuth.js";
 import upload from "../middleware/multer.js";
@@ -24,6 +25,7 @@ courseRouter.get("/getcreator", isAuth, getCreatorCourses);
 courseRouter.post("/editcourse/:courseId", isAuth, upload.single("image"), editCourse);
 courseRouter.get("/getcourse/:courseId", isAuth, getCourseById);
 courseRouter.delete("/remove/:courseId", isAuth, removeCourse);
+courseRouter.patch("/togglepublish/:courseId", isAuth, togglePublish);
 
 // Lectures
 courseRouter.post("/createlecture/:courseId", isAuth, upload.single("video"), createLecture);

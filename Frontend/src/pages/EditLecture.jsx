@@ -37,7 +37,7 @@ function EditLecture() {
     setLoading(true);
     const formdata = new FormData();
     formdata.append("lectureTitle", lectureTitle);
-    formdata.append("videoUrl", videoUrl);
+    formdata.append("video", videoUrl);
     formdata.append("isPreviewFree", isPreviewFree);
     try {
       const result = await axiosClient.post(`/api/course/editlecture/${lectureId}`, formdata);

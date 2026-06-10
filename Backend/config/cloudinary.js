@@ -10,7 +10,7 @@ const uploadOnCloudinary = async (filePath) => {
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-try {
+try { console.log("Uploading to Cloudinary:", filePath, "CLOUDINARY_NAME:", process.env.CLOUDINARY_NAME);
     if(!filePath){
         return null
     }
@@ -25,3 +25,4 @@ try {
 }
 
 export default uploadOnCloudinary
+
