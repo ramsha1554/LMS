@@ -40,7 +40,7 @@ function EditLecture() {
     formdata.append("videoUrl", videoUrl);
     formdata.append("isPreviewFree", isPreviewFree);
     try {
-      const result = await axiosClient.post(`/api/course/editlecture/${lectureId}`, formdata);
+      const result = await axiosClient.post(`/api/course/~/${lectureId}`, formdata);
       dispatch(setLectureData([...lectureData, result.data]));
       toast.success("Lecture Updated");
       navigate("/educator/courses");
