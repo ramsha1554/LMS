@@ -20,7 +20,7 @@ const useAllReviews = () => {
       }
     };
     allReviews();
-  }, []);
+  }, [dispatch]);
 };
 
 export default useAllReviews;

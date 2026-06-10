@@ -55,7 +55,7 @@ function Login() {
       });
 
       navigate("/home");
-    } catch (err) {
+    } catch {
       toast.error(
         <div className="flex items-center gap-2">
           <FaTimesCircle className="text-white" />

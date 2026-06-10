@@ -3,7 +3,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import img from "../assets/empty.jpg";
 import {
-  ArrowLeft, Star, Lock, Infinity,
+  ArrowLeft, Star, Lock, Infinity as InfinityIcon,
   Monitor, Award, Play, PlayCircle
 } from "lucide-react";
 import axiosClient from "../lib/axiosClient.js";
@@ -172,7 +172,7 @@ function ViewCourse() {
             <div className="pt-2 border-t border-neutral-100 space-y-3">
               <ul className="space-y-2.5">
                 <li className="flex items-center gap-3 text-xs text-neutral-600">
-                  <Infinity className="text-neutral-900 w-4 h-4" />
+                  <InfinityIcon className="text-neutral-900 w-4 h-4" />
                   <span>Full lifetime access</span>
                 </li>
                 <li className="flex items-center gap-3 text-xs text-neutral-600">

@@ -24,7 +24,7 @@ const usePublishedCourse = () => {
     };
 
     getCourseData();
-  }, []);
+  }, [dispatch]);
 };
 
 export default usePublishedCourse;

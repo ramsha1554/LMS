@@ -23,7 +23,7 @@ const useCreatorCourse = () => {
     };
 
     creatorCourses();
-  }, [userData]);
+  }, [dispatch, userData]);
 };
 
 export default useCreatorCourse;
