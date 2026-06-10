@@ -1,86 +1,90 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
+import { FaEdit } from "react-icons/fa";
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-
+import { ClipLoader } from 'react-spinners';
+import { setLectureData } from '../../redux/lectureSlice';
 import { toast } from 'react-toastify';
-import { SERVER_URL } from "../lib/constants";
+import axiosClient from '../../lib/axiosClient';
 
 function CreateLecture() {
-  const serverUrl = SERVER_URL
-  const navigate = useNavigate()
+  const { courseId } = useParams();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { lectureData } = useSelector(state => state.lecture);
+  const [lectureTitle, setLectureTitle] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const { courseId } = useParams()
-
-  const [lectureTitle, setLectureTitle] = useState("")
-
-  const handleCreateLecture = async (e) => {
-    e.preventDefault()
-
-    try {
-      const lectureData = {
-        lectureTitle
+  useEffect(() => {
+    const fetchLectures = async () => {
+      try {
+        const result = await axiosClient.get(`/api/course/courselecture/${courseId}`);
+        dispatch(setLectureData(result.data.lectures));
+      } catch (error) {
+        console.log(error);
       }
+    };
+    fetchLectures();
+  }, [courseId, dispatch]);
 
-      await axios.post(
-        `${serverUrl}/api/course/createlecture/${courseId}`,
-        lectureData,
-        { withCredentials: true }
-      )
-
-      toast.success("Lecture created successfully")
-      setLectureTitle("")
+  const handleCreateLecture = async () => {
+    setLoading(true);
+    try {
+      const result = await axiosClient.post(`/api/course/createlecture/${courseId}`, { lectureTitle });
+      dispatch(setLectureData([...lectureData, result.data.lecture]));
+      toast.success("Lecture Added");
+      setLectureTitle("");
     } catch (error) {
-      console.log(error)
-      toast.error("Failed to create lecture")
+      toast.error(error.response?.data?.message || "Failed to create lecture");
+    } finally {
+      setLoading(false);
     }
-  }
+  };
 
   return (
-    <div className='min-h-screen bg-gray-50 p-6'>
-      <div className='max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6'>
-        <FaArrowLeftLong
-          className='text-black w-[22px] h-[22px] cursor-pointer mb-5'
-          onClick={() => navigate(-1)}
-        />
+    <div className='min-h-screen bg-gray-100 flex items-center justify-center p-4'>
+      <div className='bg-white shadow-xl rounded-xl w-full max-w-2xl p-6'>
+        <div className='mb-6'>
+          <h1 className='text-2xl font-semibold text-gray-800 mb-1'>Let's Add a Lecture</h1>
+          <p className='text-sm text-gray-500'>Enter the title and add your video lectures to enhance your course content.</p>
+        </div>
 
-        <h1 className='text-3xl font-bold'>
-          Add New Lecture
-        </h1>
+        <input type="text"
+          className='w-full border border-gray-300 rounded-md p-3 text-sm focus:outline-none focus:ring-2 focus:ring-black mb-4'
+          placeholder='e.g. Introduction to MERN Stack'
+          onChange={(e) => setLectureTitle(e.target.value)} value={lectureTitle} />
 
-        <p className='text-gray-500 mt-2 mb-8'>
-          Create lecture content for this course.
-        </p>
-
-        <form
-          className='space-y-5'
-          onSubmit={handleCreateLecture}
-        >
-          <div>
-            <label className='block text-sm font-medium mb-2'>
-              Lecture Title
-            </label>
-
-            <input
-              type="text"
-              value={lectureTitle}
-              onChange={(e) => setLectureTitle(e.target.value)}
-              placeholder='Enter lecture title'
-              className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
-            />
-          </div>
-
-          <button
-            type='submit'
-            className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer'
-          >
-            Create Lecture
+        <div className='flex gap-4 mb-6'>
+          <button className='flex items-center gap-2 px-4 py-2 rounded-md bg-gray-200 hover:bg-gray-300 text-sm font-medium'
+            onClick={() => navigate(`/editcourse/${courseId}`)}>
+            <FaArrowLeftLong /> Back to Course
           </button>
-        </form>
+          <button className='px-5 py-2 rounded-md bg-black text-white hover:bg-gray-600 transition-all text-sm font-medium shadow'
+            disabled={loading} onClick={handleCreateLecture}>
+            {loading ? <ClipLoader size={30} color='white' /> : "+ Create Lecture"}
+          </button>
+        </div>
+
+        <div className='space-y-2'>
+          {lectureData?.map((lecture, index) => (
+            <div key={index} className='bg-gray-100 rounded-md flex justify-between items-center p-3 text-sm font-medium text-gray-700'>
+              <span>Lecture - {index + 1} : {lecture.lectureTitle}</span>
+              <FaEdit className='text-gray-500 hover:text-gray-700 cursor-pointer'
+                onClick={() => {
+                  const id = lecture?._id ?? lecture?.id;
+                  if (!id) {
+                    toast.error("Lecture id missing (cannot edit).");
+                    return;
+                  }
+                  navigate(`/editlecture/${courseId}/${id}`);
+                }} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CreateLecture
-
+export default CreateLecture;

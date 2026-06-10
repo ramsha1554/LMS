@@ -1,142 +1,123 @@
 import React, { useState } from 'react'
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-
+import axiosClient from '../../lib/axiosClient';
 import { toast } from 'react-toastify';
-import { SERVER_URL } from "../lib/constants";
 
-function EditLecture() {
+function EditCourse() {
+  const navigate = useNavigate();
+  const { courseId } = useParams();
+  const [title, setTitle] = useState("");
+  const [subTitle, setSubTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [category, setCategory] = useState("");
+  const [level, setLevel] = useState("");
+  const [price, setPrice] = useState("");
+  const [thumbnail, setThumbnail] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-    const navigate = useNavigate()
-    const serverUrl = SERVER_URL
-    const { courseId, lectureId } = useParams()
-
-
-    const [lectureTitle, setLectureTitle] = useState("")
-    const [video, setVideo] = useState(null)
-    const [isPreviewFree, setIsPreviewFree] = useState(false)
-
-    const handleUpdateLecture = async (e) => {
-
-        e.preventDefault()
-
-        try {
-
-            const formData = new FormData()
-
-            formData.append("lectureTitle", lectureTitle)
-            formData.append("isPreviewFree", isPreviewFree)
-
-            if(video){
-                formData.append("video", video)
-            }
-
-            await axios.put(
-                `${serverUrl}/api/course/editlecture/${lectureId}`,
-                formData,
-                {
-                    withCredentials: true,
-                    headers:{
-                        "Content-Type":"multipart/form-data"
-                    }
-                }
-            )
-
-            toast.success("Lecture updated successfully")
-
-        } catch (error) {
-
-            console.log(error)
-
-            toast.error("Failed to update lecture")
-
-        }
-
+  const handleEditCourse = async () => {
+    setLoading(true);
+    const formdata = new FormData();
+    formdata.append("title", title);
+    formdata.append("subTitle", subTitle);
+    formdata.append("description", description);
+    formdata.append("category", category);
+    formdata.append("level", level);
+    formdata.append("price", price);
+    if (thumbnail) formdata.append("image", thumbnail);
+    try {
+      await axiosClient.post(`/api/course/editcourse/${courseId}`, formdata);
+      toast.success("Course updated!");
+      navigate("/educator/courses");
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Update failed");
+    } finally {
+      setLoading(false);
     }
+  };
 
   return (
-    <div className='min-h-screen bg-gray-50 p-6'>
+    <div className='max-w-5xl mx-auto p-6 mt-10 bg-white rounded-lg shadow-md'>
+      <div className='flex items-center justify-center gap-[20px] md:justify-between flex-col md:flex-row mb-6 relative'>
+        <FaArrowLeftLong className='top-[-20%] md:top-[20%] absolute left-[0] md:left-[2%] w-[22px] h-[22px] cursor-pointer'
+          onClick={() => navigate("/educator/courses")} />
+        <h2 className='text-2xl font-semibold md:pl-[60px]'>Add Detail Information regarding the Course</h2>
+        <button className='bg-black text-white px-4 py-2 rounded-md'
+          onClick={() => navigate(`/createlecture/${courseId}`)}>
+          Go to Lecture page
+        </button>
+      </div>
 
-        <div className='max-w-4xl mx-auto bg-white rounded-xl shadow-md p-6'>
+      <div className='bg-gray-50 p-6 rounded-md space-y-6'>
+        <h2 className='text-lg font-medium mb-4'>Basic Course Information</h2>
 
-            <FaArrowLeftLong
-             className='text-black w-[22px] h-[22px] cursor-pointer mb-5'
-             onClick={()=>navigate(-1)}
-            />
-
-            <h1 className='text-3xl font-bold'>
-                Edit Lecture
-            </h1>
-
-            <p className='text-gray-500 mt-2 mb-8'>
-                Update lecture information and content.
-            </p>
-
-            <form
-             className='space-y-5'
-             onSubmit={handleUpdateLecture}
-            >
-
-                <div>
-
-                    <label className='block text-sm font-medium mb-2'>
-                        Lecture Title
-                    </label>
-
-                    <input
-                     type="text"
-                     value={lectureTitle}
-                     onChange={(e)=>setLectureTitle(e.target.value)}
-                     placeholder='Update lecture title'
-                     className='w-full border border-gray-300 rounded-lg px-4 py-3 outline-none'
-                    />
-
-                </div>
-
-                <div>
-
-                    <label className='block text-sm font-medium mb-2'>
-                        Upload Lecture Video
-                    </label>
-
-                    <input
-                     type="file"
-                     accept='video/*'
-                     onChange={(e)=>setVideo(e.target.files[0])}
-                     className='w-full border border-gray-300 rounded-lg px-4 py-3'
-                    />
-
-                </div>
-
-                <div className='flex items-center gap-3'>
-
-                    <input
-                     type="checkbox"
-                     checked={isPreviewFree}
-                     onChange={(e)=>setIsPreviewFree(e.target.checked)}
-                    />
-
-                    <label className='text-sm font-medium'>
-                        Make this lecture free preview
-                    </label>
-
-                </div>
-
-                <button
-                 type='submit'
-                 className='bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 cursor-pointer'
-                >
-                    Save Lecture
-                </button>
-
-            </form>
-
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>Title</label>
+          <input type="text" className='w-full border px-4 py-2 rounded-md' placeholder='Course Title'
+            onChange={(e) => setTitle(e.target.value)} value={title} />
         </div>
 
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>Subtitle</label>
+          <input type="text" className='w-full border px-4 py-2 rounded-md' placeholder='Course Subtitle'
+            onChange={(e) => setSubTitle(e.target.value)} value={subTitle} />
+        </div>
+
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>Description</label>
+          <textarea className='w-full border px-4 py-2 rounded-md h-24 resize-none' placeholder='Course Description'
+            onChange={(e) => setDescription(e.target.value)} value={description} />
+        </div>
+
+        <div>
+          <label className='block text-sm font-medium text-gray-700 mb-1'>Thumbnail</label>
+          <input type="file" accept='image/*'
+            className='w-full border border-gray-300 rounded-md p-2 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:bg-gray-700 file:text-white'
+            onChange={(e) => setThumbnail(e.target.files[0])} />
+        </div>
+
+        <div className='flex flex-col sm:flex-row sm:space-x-4 space-y-4 sm:space-y-0'>
+          <div className='flex-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>Category</label>
+            <select className='w-full border px-4 py-2 rounded-md bg-white'
+              onChange={(e) => setCategory(e.target.value)} value={category}>
+              <option value="">Select Category</option>
+              <option value="App Development">App Development</option>
+              <option value="AI/ML">AI/ML</option>
+              <option value="AI Tools">AI Tools</option>
+              <option value="Data Science">Data Science</option>
+              <option value="Data Analytics">Data Analytics</option>
+              <option value="Ethical Hacking">Ethical Hacking</option>
+              <option value="UI UX Designing">UI UX Designing</option>
+              <option value="Web Development">Web Development</option>
+              <option value="Others">Others</option>
+            </select>
+          </div>
+          <div className='flex-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>Level</label>
+            <select className='w-full border px-4 py-2 rounded-md bg-white'
+              onChange={(e) => setLevel(e.target.value)} value={level}>
+              <option value="">Select Level</option>
+              <option value="Beginner">Beginner</option>
+              <option value="Intermediate">Intermediate</option>
+              <option value="Advanced">Advanced</option>
+            </select>
+          </div>
+          <div className='flex-1'>
+            <label className='block text-sm font-medium text-gray-700 mb-1'>Price (INR)</label>
+            <input type="number" className='w-full border px-4 py-2 rounded-md' placeholder='₹'
+              onChange={(e) => setPrice(e.target.value)} value={price} />
+          </div>
+        </div>
+
+        <button className='w-full bg-black text-white py-3 rounded-md text-sm font-medium hover:bg-gray-700 transition'
+          disabled={loading} onClick={handleEditCourse}>
+          {loading ? "Saving..." : "Save Changes"}
+        </button>
+      </div>
     </div>
-  )
+  );
 }
 
-export default EditLecture
-
+export default EditCourse;
