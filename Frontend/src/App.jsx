@@ -21,6 +21,7 @@ const EditCourse = React.lazy(() => import("./pages/EditCourse"));
 const CreateLecture = React.lazy(() => import("./pages/CreateLecture"));
 const EditLecture = React.lazy(() => import("./pages/EditLecture"));
 const Profile = React.lazy(() => import("./pages/Profile"));
+const EditProfile = React.lazy(() => import("./pages/EditProfile"));
 const EnrolledCourses = React.lazy(() => import("./pages/EnrolledCourses"));
 const Dashboard = React.lazy(() => import("./pages/Educator/Dashboard"));
 
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/educator/courses" element={<Courses />} />
 
           {/* Protected routes */}
+          <Route path="/editprofile" element={<RequireAuth><EditProfile /></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
           <Route path="/mycourses" element={<RequireAuth><EnrolledCourses /></RequireAuth>} />
           <Route path="/viewlecture/:lectureId" element={<RequireAuth><ViewLecture /></RequireAuth>} />
