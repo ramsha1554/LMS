@@ -1,7 +1,7 @@
 
 import express from "express";
 import { createReview, getReviews } from "../controllers/reviewController.js";
-import { isAuth } from "../middleware/isAuth.js";
+import isAuth from "../middleware/isAuth.js";
 
 const router = express.Router();
 

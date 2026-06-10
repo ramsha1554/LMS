@@ -21,7 +21,7 @@ const userSchema = mongoose.Schema(
     photo: {
       type: String,
       default:
-        "https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg",
+        "https://ui-avatars.com/api/?background=000000&color=fff&name=User",
     },
     enrolledCourses: [{ type: mongoose.Schema.Types.ObjectId, ref: "Course" }],
     resetotp: { type: String },

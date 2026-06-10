@@ -52,7 +52,7 @@ function Courses() {
 
     creatorCourses();
 
-  }, [userData]);
+  }, [userData, dispatch]);
 
   return (
 
