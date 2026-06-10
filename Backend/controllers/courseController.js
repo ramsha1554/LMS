@@ -72,6 +72,9 @@ export const editCourse = async (req, res) => {
     if (!course) {
       return res.status(400).json({ message: "Course is not found" });
     }
+    if (course.creator.toString() !== req.userId) {
+      return res.status(403).json({ message: "Unauthorized: you do not own this course" });
+    }
     const updateData = {
       title,
       subTitle,
@@ -113,6 +116,9 @@ export const removeCourse = async (req, res) => {
     let course = await Course.findById(courseId);
     if (!course) {
       return res.status(400).json({ message: "Course is not found" });
+    }
+    if (course.creator.toString() !== req.userId) {
+      return res.status(403).json({ message: "Unauthorized: you do not own this course" });
     }
     course = await Course.findByIdAndDelete(courseId, { new: true });
     return res.status(200).json({ message: "Course removed" });
@@ -225,3 +231,4 @@ export const getCreatorById = async (req, res) => {
     return res.status(500).json({ message: `Failed to get Creator ${error}` });
   }
 };
+
