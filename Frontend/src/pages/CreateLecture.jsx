@@ -4,9 +4,9 @@ import { FaEdit } from "react-icons/fa";
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { setLectureData } from '../../redux/lectureSlice';
+import { setLectureData } from '../redux/lectureSlice';
 import { toast } from 'react-toastify';
-import axiosClient from '../../lib/axiosClient';
+import axiosClient from '../lib/axiosClient';
 
 function CreateLecture() {
   const { courseId } = useParams();

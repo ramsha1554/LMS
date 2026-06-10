@@ -1,12 +1,11 @@
 import React, { useState } from 'react'
-import axios from 'axios';
 import { FaArrowLeftLong } from "react-icons/fa6";
 import { useNavigate, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { setLectureData } from '../../redux/lectureSlice';
+import { setLectureData } from '../redux/lectureSlice';
 import { toast } from 'react-toastify';
 import { ClipLoader } from 'react-spinners';
-import axiosClient from '../../lib/axiosClient';
+import axiosClient from '../lib/axiosClient';
 
 function EditLecture() {
   const { courseId, lectureId } = useParams();
