@@ -7,7 +7,7 @@ import { setUserData } from "../redux/userSlice";
 
 // Hook to hydrate Redux userData from the cookie/JWT.
 // Call this once at app start.
-const getCurrentUser = () => {
+const useCurrentUser = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -25,4 +25,4 @@ const getCurrentUser = () => {
   }, [dispatch]);
 };
 
-export default getCurrentUser;
+export default useCurrentUser;

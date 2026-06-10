@@ -6,7 +6,7 @@ import { SERVER_URL } from "../lib/constants";
 import { useDispatch } from "react-redux";
 import { setCourseData } from "../redux/courseSlice";
 
-const getPublishedCourse = () => {
+const usePublishedCourse = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -27,4 +27,4 @@ const getPublishedCourse = () => {
   }, []);
 };
 
-export default getPublishedCourse;
+export default usePublishedCourse;

@@ -4,7 +4,7 @@ import { SERVER_URL } from "../lib/constants";
 import { useDispatch } from "react-redux";
 import { setReviewData } from "../redux/reviewSlice";
 
-const getAllReviews = () => {
+const useAllReviews = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -23,4 +23,4 @@ const getAllReviews = () => {
   }, []);
 };
 
-export default getAllReviews;
+export default useAllReviews;
