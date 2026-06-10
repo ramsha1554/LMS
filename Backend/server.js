@@ -12,7 +12,7 @@ import reviewRouter from "./routes/reviewRoute.js";
 import paymentRouter from "./routes/paymentRoute.js";
 
 // Load environment variables
-dotenv.config();
+dotenv.config({ path: "./.env" });
 
 const app = express();
 
