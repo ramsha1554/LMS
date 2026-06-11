@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import img from "../assets/empty.jpg";
@@ -25,6 +25,48 @@ function ViewCourse() {
 
   const [selectedLecture, setSelectedLecture] = useState(null);
   const [loading, setLoading] = useState(false);
+
+  // Reviews state
+  const [reviews, setReviews] = useState([]);
+  const [rating, setRating] = useState(5);
+  const [comment, setComment] = useState("");
+  const [reviewLoading, setReviewLoading] = useState(false);
+
+  useEffect(() => {
+    if (!courseId) return;
+    const fetchReviews = async () => {
+      try {
+        const { data } = await axiosClient.get(`/api/review/getreviews/${courseId}`);
+        if (data.success) setReviews(data.reviews);
+      } catch (e) {
+        console.log(e);
+      }
+    };
+    fetchReviews();
+  }, [courseId]);
+
+  const handleSubmitReview = async () => {
+    if (!comment.trim()) { toast.error("Please write a comment"); return; }
+    setReviewLoading(true);
+    try {
+      const { data } = await axiosClient.post("/api/review/createreview", { courseId, rating, comment });
+      if (data.success) {
+        toast.success("Review submitted!");
+        setComment("");
+        setRating(5);
+        const res = await axiosClient.get(`/api/review/getreviews/${courseId}`);
+        if (res.data.success) setReviews(res.data.reviews);
+      }
+    } catch (error) {
+      toast.error(error.response?.data?.message || "Failed to submit review");
+    } finally {
+      setReviewLoading(false);
+    }
+  };
+
+  const avgRating = reviews.length
+    ? (reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length).toFixed(1)
+    : null;
 
   const loadRazorpayScript = () => {
     return new Promise((resolve) => {
@@ -110,13 +152,12 @@ function ViewCourse() {
               <div className="flex items-center gap-2 text-amber-500">
                 <div className="flex items-center gap-1">
                   <Star className="w-3.5 h-3.5 fill-current" />
-                  <span className="text-xs font-semibold text-neutral-800">4.8</span>
+                  <span className="text-xs font-semibold text-neutral-800">{avgRating || "No ratings"}</span>
                 </div>
-                <span className="text-neutral-400 text-xs">(1,200 reviews)</span>
+                <span className="text-neutral-400 text-xs">({reviews.length} reviews)</span>
               </div>
               <div className="flex items-baseline gap-2 pt-1">
                 <span className="text-lg font-bold text-neutral-900">{course ? "Rs. " + course.price : "Loading..."}</span>
-                <span className="text-xs text-neutral-400 line-through">Rs. 599</span>
               </div>
             </div>
             <div className="pt-2 border-t border-neutral-100 space-y-3">
@@ -164,6 +205,60 @@ function ViewCourse() {
             </div>
           </div>
         </div>
+
+        {/* Reviews Section */}
+        <div className="pt-6 border-t border-neutral-100 space-y-6">
+          <h2 className="text-sm font-semibold text-neutral-900 uppercase tracking-wider">Student Reviews</h2>
+
+          {/* Write Review — enrolled students only */}
+          {isEnrolled && (
+            <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-3">
+              <p className="text-xs font-semibold text-neutral-700">Write a Review</p>
+              <div className="flex items-center gap-1">
+                {[1,2,3,4,5].map((star) => (
+                  <button key={star} onClick={() => setRating(star)}>
+                    <Star className={`w-4 h-4 ${star <= rating ? "fill-amber-400 text-amber-400" : "text-neutral-300"}`} />
+                  </button>
+                ))}
+              </div>
+              <textarea
+                value={comment}
+                onChange={(e) => setComment(e.target.value)}
+                placeholder="Share your experience..."
+                className="w-full p-3 border border-neutral-200 rounded-md text-xs resize-none h-20 focus:outline-none focus:ring-1 focus:ring-neutral-900"
+              />
+              <button onClick={handleSubmitReview} disabled={reviewLoading}
+                className="px-4 py-2 bg-black text-white rounded-md text-xs font-medium disabled:opacity-50">
+                {reviewLoading ? "Submitting..." : "Submit Review"}
+              </button>
+            </div>
+          )}
+
+          {/* Display Reviews */}
+          {reviews.length === 0 ? (
+            <p className="text-xs text-neutral-400">No reviews yet. Be the first to review!</p>
+          ) : (
+            <div className="space-y-4">
+              {reviews.map((review, index) => (
+                <div key={index} className="border border-neutral-100 rounded-xl p-4 space-y-1">
+                  <div className="flex items-center gap-2">
+                    <div className="w-7 h-7 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-bold text-neutral-700">
+                      {review.userId?.name?.slice(0,1).toUpperCase() || "U"}
+                    </div>
+                    <span className="text-xs font-semibold text-neutral-800">{review.userId?.name || "User"}</span>
+                    <div className="flex items-center gap-0.5 ml-auto">
+                      {[1,2,3,4,5].map((star) => (
+                        <Star key={star} className={`w-3 h-3 ${star <= review.rating ? "fill-amber-400 text-amber-400" : "text-neutral-200"}`} />
+                      ))}
+                    </div>
+                  </div>
+                  <p className="text-xs text-neutral-600 pl-9">{review.comment}</p>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
       </div>
     </div>
   );
