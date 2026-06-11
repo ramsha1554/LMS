@@ -55,7 +55,7 @@ function Card({ course }) {
           {/* Bottom */}
           <div className="flex items-center justify-between pt-1">
             <span className="text-sm font-bold text-neutral-900">
-              ₹{course?.price}
+              ₹{course?.price ?? 0}
             </span>
             <button className="bg-black hover:bg-neutral-900 active:bg-neutral-800 text-white px-3.5 py-1.5 rounded-md text-xs font-medium transition-colors duration-200 cursor-pointer">
               View Course

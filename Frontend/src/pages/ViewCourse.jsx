@@ -157,7 +157,7 @@ function ViewCourse() {
                 <span className="text-neutral-400 text-xs">({reviews.length} reviews)</span>
               </div>
               <div className="flex items-baseline gap-2 pt-1">
-                <span className="text-lg font-bold text-neutral-900">{course ? "Rs. " + course.price : "Loading..."}</span>
+                <span className="text-lg font-bold text-neutral-900">{course ? "Rs. " + (course.price ?? "0") : "Loading..."}</span>
               </div>
             </div>
             <div className="pt-2 border-t border-neutral-100 space-y-3">
@@ -265,3 +265,4 @@ function ViewCourse() {
 }
 
 export default ViewCourse;
+
