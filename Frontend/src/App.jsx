@@ -4,9 +4,9 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import RequireAuth from "./components/RequireAuth";
 import RequireEducator from "./components/RequireEducator";
-
 import RouteFallback from "./components/RouteFallback";
 import useCurrentUser from "./customHooks/useCurrentUser";
+import useAllReviews from "./customHooks/useAllReviews";
 
 const Courses = React.lazy(() => import("./pages/Educator/Courses"));
 const ForgetPassword = React.lazy(() => import("./pages/ForgetPassword"));
@@ -26,11 +26,12 @@ const EnrolledCourses = React.lazy(() => import("./pages/EnrolledCourses"));
 const Dashboard = React.lazy(() => import("./pages/Educator/Dashboard"));
 
 const App = () => {
- useCurrentUser();
+  useCurrentUser();
+  useAllReviews();
   return (
     <>
       <ToastContainer position="top-right" autoClose={5000} theme="light" />
-      <Suspense fallback={<RouteFallback label="Loading page…" />}>
+      <Suspense fallback={<RouteFallback label="Loading page..." />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/home" element={<Home />} />
@@ -39,9 +40,7 @@ const App = () => {
           <Route path="/forget" element={<ForgetPassword />} />
           <Route path="/allcourses" element={<AllCourses />} />
           <Route path="/course/:courseId" element={<ViewCourse />} />
-          <Route path="/educator/courses" element={<Courses />} />
-
-          {/* Protected routes */}
+          <Route path="/educator/courses" element={<RequireEducator><Courses /></RequireEducator>} />
           <Route path="/editprofile" element={<RequireAuth><EditProfile /></RequireAuth>} />
           <Route path="/profile" element={<RequireAuth><Profile /></RequireAuth>} />
           <Route path="/mycourses" element={<RequireAuth><EnrolledCourses /></RequireAuth>} />
