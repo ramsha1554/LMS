@@ -56,8 +56,8 @@ const Navbar = () => {
             onClick={() => setOpen(!open)}
             className="w-10 h-10 rounded-full bg-neutral-100 hover:bg-neutral-200 text-neutral-600 hover:text-black flex items-center justify-center transition-colors duration-200 focus:outline-none focus:ring-1 focus:ring-neutral-900"
           >
-            {userData?.photoUrl ? (
-              <img src={userData.photoUrl} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
+            {userData?.photo ? (
+              <img src={userData.photo} alt="avatar" className="w-10 h-10 rounded-full object-cover" />
             ) : (
               <User className="w-5 h-5" />
             )}
@@ -129,3 +129,5 @@ const Navbar = () => {
 };
 
 export default Navbar;
+
+

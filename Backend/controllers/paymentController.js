@@ -13,6 +13,7 @@ export const createOrder = async (req, res) => {
     if (user.enrolledCourses.includes(courseId)) {
       return res.status(400).json({ message: "Already enrolled" });
     }
+    if (!course.price || course.price <= 0) return res.status(400).json({ message: "Course price is not set" });
     const options = {
       amount: course.price * 100,
       currency: "INR",
@@ -64,3 +65,4 @@ export const verifyPayment = async (req, res) => {
     return res.status(500).json({ message: `Payment verification failed: ${error.message}` });
   }
 };
+

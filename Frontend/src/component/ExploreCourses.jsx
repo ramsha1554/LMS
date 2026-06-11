@@ -104,3 +104,4 @@ function ExploreCourses() {
 }
 
 export default ExploreCourses;
+

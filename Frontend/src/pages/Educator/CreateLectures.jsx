@@ -106,3 +106,5 @@ function CreateLectures() {
 }
 
 export default CreateLectures;
+
+

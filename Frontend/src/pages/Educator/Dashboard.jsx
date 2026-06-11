@@ -40,9 +40,9 @@ function Dashboard() {
         <div className='max-w-5xl mx-auto bg-white rounded-xl shadow-md p-6 flex flex-col md:flex-row items-center gap-6'>
           
           {/* ✅ Avatar: image or initials fallback */}
-          {userData?.photoUrl ? (
+          {userData?.photo ? (
             <img
-              src={userData.photoUrl}
+              src={userData.photo}
               className='w-28 h-28 rounded-full object-cover border-4 border-black shadow-md'
               alt="Educator"
             />
@@ -108,3 +108,4 @@ function Dashboard() {
 }
 
 export default Dashboard
+

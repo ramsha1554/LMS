@@ -14,3 +14,5 @@ const lectureSlice = createSlice({
 
 export const { setLectureData } = lectureSlice.actions;
 export default lectureSlice.reducer;
+
+

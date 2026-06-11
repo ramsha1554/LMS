@@ -1,7 +1,7 @@
 import PDFDocument from "pdfkit";
 import CourseProgress from "../models/courseProgressModel.js";
 import Course from "../models/courseModel.js";
-import User from "../models/userModel.js";
+import User from "../models/user.model.js";
 
 export const generateCertificate = async (req, res) => {
   try {

@@ -22,9 +22,9 @@ function Profile() {
 
         {/* Profile Card Header */}
         <div className="flex flex-col items-center text-center">
-          {userData?.photoUrl ? (
+          {userData?.photo ? (
             <img
-              src={userData?.photoUrl}
+              src={userData?.photo}
               className="w-20 h-20 rounded-full object-cover border border-neutral-200 shadow-sm"
               alt={userData?.name || "Profile avatar"}
             />
@@ -92,3 +92,5 @@ function Profile() {
 }
 
 export default Profile;
+
+
