@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import usePublishedCourse from "../customHooks/usePublishedCourse";
 import axiosClient from "../lib/axiosClient";
+import { SERVER_URL } from "../lib/constants";
 import { CheckCircle, Circle, Lock } from "lucide-react";
 
 function ViewLecture() {
@@ -113,7 +114,7 @@ function ViewLecture() {
       <CheckCircle className="w-3.5 h-3.5" /> Course completed!
     </p>
     
-      href={`${import.meta.env.VITE_SERVER_URL}/api/certificate/${currentCourse._id}`}
+      href={`${SERVER_URL}/api/certificate/${currentCourse._id}`}
       target="_blank"
       rel="noopener noreferrer"
       className="text-xs bg-black text-white px-3 py-1 rounded-md hover:bg-neutral-800 transition-colors"
@@ -165,4 +166,6 @@ function ViewLecture() {
 }
 
 export default ViewLecture;
+
+
 
