@@ -108,4 +108,5 @@ function CreateCourses() {
   )
 }
 
-export default CreateCourses
+export default CreateCourses;
+// Deprecated duplicate root educator page. Use ./pages/Educator/CreateCourses instead.

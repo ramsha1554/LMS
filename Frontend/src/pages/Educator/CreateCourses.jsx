@@ -5,7 +5,7 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ClipLoader } from "react-spinners";
 import { toast } from "react-toastify";
-import { SERVER_URL } from "../../lib/constants";
+
 
 function CreateCourses() {
   const navigate = useNavigate();

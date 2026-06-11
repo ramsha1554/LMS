@@ -88,3 +88,4 @@ function CreateLecture() {
 }
 
 export default CreateLecture;
+// Deprecated duplicate root educator page. Use ./pages/Educator/CreateLecture instead.

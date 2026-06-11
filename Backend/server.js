@@ -2,6 +2,8 @@ import "./config/env.js";
 import express from "express";
 import cors from "cors";
 import cookieParser from "cookie-parser";
+import helmet from "helmet";
+import rateLimit from "express-rate-limit";
 import connectDB from "./config/connectDB.js";
 import authRouter from "./routes/authRoute.js";
 import userRouter from "./routes/userRoute.js";
@@ -11,6 +13,15 @@ import paymentRouter from "./routes/paymentRoute.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
+
+app.use(helmet());
+
+const limiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 100,
+  message: { message: "Too many requests, please try again later." },
+});
+app.use("/api/auth", limiter);
 
 app.use(cors({
   origin: process.env.CORS_ORIGIN || [

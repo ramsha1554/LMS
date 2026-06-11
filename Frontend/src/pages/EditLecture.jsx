@@ -112,3 +112,4 @@ function EditLecture() {
 }
 
 export default EditLecture;
+// Deprecated duplicate root educator page. Use ./pages/Educator/EditLecture instead.

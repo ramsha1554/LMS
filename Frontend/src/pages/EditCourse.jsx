@@ -121,3 +121,4 @@ function EditCourse() {
 }
 
 export default EditCourse;
+// Deprecated duplicate root educator page. Use ./pages/Educator/EditCourse instead.

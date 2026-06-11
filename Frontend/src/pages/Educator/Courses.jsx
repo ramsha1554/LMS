@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { useEffect } from "react";
+
 import img from "../../assets/empty.jpg";
 import { setCreatorCourseData } from "../../redux/courseSlice";
 import axiosClient from "../../lib/axiosClient";
@@ -24,28 +25,34 @@ function Courses() {
         console.log(error);
       }
     };
+
     fetchCourses();
   }, [userData, dispatch]);
 
-  const handleTogglePublish = async (courseId, currentStatus) => {
+  const handleTogglePublish = async (courseId) => {
     try {
-      const { data } = await axiosClient.patch(`/api/course/togglepublish/${courseId}`);
+      const { data } = await axiosClient.patch(
+        `/api/course/togglepublish/${courseId}`
+      );
       toast.success(data.message);
-      // Update local redux state immediately
-      dispatch(setCreatorCourseData(
-        creatorCourseData.map(c =>
-          c._id === courseId ? { ...c, isPublished: data.isPublished } : c
+
+      dispatch(
+        setCreatorCourseData(
+          creatorCourseData.map((c) =>
+            c._id === courseId ? { ...c, isPublished: data.isPublished } : c
+          )
         )
-      ));
+      );
     } catch (error) {
-      toast.error(error.response?.data?.message || "Failed to update status");
+      toast.error(
+        error.response?.data?.message || "Failed to update status"
+      );
     }
   };
 
   return (
     <div className="flex min-h-screen bg-gray-100">
       <div className="w-full min-h-screen p-4 sm:p-6 bg-gray-100">
-
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-3">
           <div className="flex items-center justify-center gap-3">
@@ -77,7 +84,10 @@ function Courses() {
             </thead>
             <tbody>
               {creatorCourseData?.map((course, index) => (
-                <tr key={index} className="border-b hover:bg-gray-50 transition duration-200">
+                <tr
+                  key={index}
+                  className="border-b hover:bg-gray-50 transition duration-200"
+                >
                   <td className="py-3 px-4 flex items-center gap-4">
                     <img
                       src={course?.thumbnail || img}
@@ -86,16 +96,28 @@ function Courses() {
                     />
                     <span>{course?.title}</span>
                   </td>
-                  <td className="px-4 py-3">{course?.price ? `₹${course.price}` : "₹ NA"}</td>
                   <td className="px-4 py-3">
-                    <span className={`px-3 py-1 rounded-full text-xs ${course?.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+                    {course?.price ? `₹${course.price}` : "₹ NA"}
+                  </td>
+                  <td className="px-4 py-3">
+                    <span
+                      className={`px-3 py-1 rounded-full text-xs ${
+                        course?.isPublished
+                          ? "bg-green-100 text-green-600"
+                          : "bg-red-100 text-red-600"
+                      }`}
+                    >
                       {course?.isPublished ? "Published" : "Draft"}
                     </span>
                   </td>
                   <td className="px-4 py-3">
                     <button
-                      onClick={() => handleTogglePublish(course._id, course.isPublished)}
-                      className={`px-3 py-1 rounded text-xs font-medium ${course?.isPublished ? "bg-red-500 hover:bg-red-600 text-white" : "bg-green-500 hover:bg-green-600 text-white"}`}
+                      onClick={() => handleTogglePublish(course._id)}
+                      className={`px-3 py-1 rounded text-xs font-medium ${
+                        course?.isPublished
+                          ? "bg-red-500 hover:bg-red-600 text-white"
+                          : "bg-green-500 hover:bg-green-600 text-white"
+                      }`}
                     >
                       {course?.isPublished ? "Unpublish" : "Publish"}
                     </button>
@@ -110,43 +132,69 @@ function Courses() {
               ))}
             </tbody>
           </table>
-          <p className="text-center text-sm text-gray-400 mt-6">A list of your recent courses.</p>
+          <p className="text-center text-sm text-gray-400 mt-6">
+            A list of your recent courses.
+          </p>
         </div>
 
         {/* Mobile Cards */}
         <div className="md:hidden space-y-4">
           {creatorCourseData?.map((course, index) => (
-            <div key={index} className="bg-white rounded-lg shadow p-4 flex flex-col gap-3">
+            <div
+              key={index}
+              className="bg-white rounded-lg shadow p-4 flex flex-col gap-3"
+            >
               <div className="flex gap-4 items-center">
-                <img src={course?.thumbnail || img} alt="" className="w-16 h-16 rounded-md object-cover" />
+                <img
+                  src={course?.thumbnail || img}
+                  alt=""
+                  className="w-16 h-16 rounded-md object-cover"
+                />
                 <div className="flex-1">
                   <h2 className="font-medium text-sm">{course?.title}</h2>
-                  <p className="text-gray-600 text-xs mt-1">{course?.price ? `₹${course.price}` : "₹ NA"}</p>
+                  <p className="text-gray-600 text-xs mt-1">
+                    {course?.price ? `₹${course.price}` : "₹ NA"}
+                  </p>
                 </div>
                 <FaEdit
                   className="text-gray-600 hover:text-blue-600 cursor-pointer"
                   onClick={() => navigate(`/editcourse/${course?._id}`)}
                 />
               </div>
+
               <div className="flex items-center gap-3">
-                <span className={`px-3 py-1 text-xs rounded-full ${course?.isPublished ? "bg-green-100 text-green-600" : "bg-red-100 text-red-600"}`}>
+                <span
+                  className={`px-3 py-1 text-xs rounded-full ${
+                    course?.isPublished
+                      ? "bg-green-100 text-green-600"
+                      : "bg-red-100 text-red-600"
+                  }`}
+                >
                   {course?.isPublished ? "Published" : "Draft"}
                 </span>
+
                 <button
-                  onClick={() => handleTogglePublish(course._id, course.isPublished)}
-                  className={`px-3 py-1 rounded text-xs font-medium ${course?.isPublished ? "bg-red-500 hover:bg-red-600 text-white" : "bg-green-500 hover:bg-green-600 text-white"}`}
+                  onClick={() => handleTogglePublish(course._id)}
+                  className={`px-3 py-1 rounded text-xs font-medium ${
+                    course?.isPublished
+                      ? "bg-red-500 hover:bg-red-600 text-white"
+                      : "bg-green-500 hover:bg-green-600 text-white"
+                  }`}
                 >
                   {course?.isPublished ? "Unpublish" : "Publish"}
                 </button>
               </div>
             </div>
           ))}
-          <p className="text-center text-sm text-gray-400 mt-4">A list of your recent courses.</p>
-        </div>
 
+          <p className="text-center text-sm text-gray-400 mt-4">
+            A list of your recent courses.
+          </p>
+        </div>
       </div>
     </div>
   );
 }
 
 export default Courses;
+
