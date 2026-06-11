@@ -7,6 +7,7 @@ import RequireEducator from "./components/RequireEducator";
 import RouteFallback from "./components/RouteFallback";
 import useCurrentUser from "./customHooks/useCurrentUser";
 import useAllReviews from "./customHooks/useAllReviews";
+import ScrollToTop from "./components/ScrollToTop";
 
 const Courses = React.lazy(() => import("./pages/Educator/Courses"));
 const ForgetPassword = React.lazy(() => import("./pages/ForgetPassword"));
@@ -30,6 +31,7 @@ const App = () => {
   useAllReviews();
   return (
     <>
+      <ScrollToTop />
       <ToastContainer position="top-right" autoClose={5000} theme="light" />
       <Suspense fallback={<RouteFallback label="Loading page..." />}>
         <Routes>
@@ -55,5 +57,6 @@ const App = () => {
     </>
   );
 };
+
 
 export default App;
