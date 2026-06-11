@@ -3,7 +3,7 @@ import { User } from "lucide-react";
 import { useSelector, useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
-import axios from "axios";
+import axiosClient from "../lib/axiosClient.js";
 import { setUserData } from "../redux/userSlice.js";
 
 const Navbar = () => {
@@ -25,7 +25,7 @@ const Navbar = () => {
 
   const handleLogout = async () => {
     try {
-      await axios.get("http://localhost:5000/api/auth/logout", { withCredentials: true });
+      await axiosClient.get("/api/auth/logout");
       dispatch(setUserData(null));
       toast.success("Logout Successful!", {
         position: "top-right", autoClose: 3000,
