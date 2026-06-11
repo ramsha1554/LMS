@@ -30,7 +30,6 @@ function ViewLecture() {
   const lectures = currentCourse?.lectures || [];
   const selectedLecture = lectures.find((l) => l._id === lectureId);
 
-  // Fetch progress when course is known
   useEffect(() => {
     if (!currentCourse?._id || !isEnrolled) return;
     const fetchProgress = async () => {
@@ -45,7 +44,6 @@ function ViewLecture() {
     fetchProgress();
   }, [currentCourse?._id, isEnrolled]);
 
-  // Mark lecture complete when video ends
   const handleVideoEnded = async () => {
     if (!isEnrolled || !currentCourse?._id || !lectureId) return;
     if (completedLectures.includes(lectureId)) return;
@@ -73,7 +71,6 @@ function ViewLecture() {
           onClick={() => navigate(-1)}
         />
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          {/* Video Player */}
           <div className="lg:col-span-2 bg-white rounded-2xl shadow-md p-5">
             <div className="aspect-video bg-black rounded-xl overflow-hidden flex items-center justify-center">
               {selectedLecture?.videoUrl ? (
@@ -93,7 +90,6 @@ function ViewLecture() {
               <p className="text-gray-500 mt-2">Continue your learning journey.</p>
             </div>
 
-            {/* Progress Bar */}
             {isEnrolled && totalCount > 0 && (
               <div className="mt-5 space-y-2">
                 <div className="flex items-center justify-between text-sm">
@@ -109,25 +105,24 @@ function ViewLecture() {
                   />
                 </div>
                 {isCourseCompleted && (
-  <div className="flex items-center gap-3">
-    <p className="text-xs text-green-600 font-medium flex items-center gap-1">
-      <CheckCircle className="w-3.5 h-3.5" /> Course completed!
-    </p>
-    
-      href={`${SERVER_URL}/api/certificate/${currentCourse._id}`}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="text-xs bg-black text-white px-3 py-1 rounded-md hover:bg-neutral-800 transition-colors"
-    >
-      Download Certificate
-    </a>
-  </div>
-)}
+                  <div className="flex items-center gap-3">
+                    <p className="text-xs text-green-600 font-medium flex items-center gap-1">
+                      <CheckCircle className="w-3.5 h-3.5" /> Course completed!
+                    </p>
+                    <a
+                      href={SERVER_URL + "/api/certificate/" + currentCourse._id}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs bg-black text-white px-3 py-1 rounded-md hover:bg-neutral-800 transition-colors"
+                    >
+                      Download Certificate
+                    </a>
+                  </div>
+                )}
               </div>
             )}
           </div>
 
-          {/* Lecture Sidebar */}
           <div className="bg-white rounded-2xl shadow-md p-5">
             <h2 className="text-xl font-bold mb-1">{currentCourse?.title || "Course Lectures"}</h2>
             <p className="text-xs text-gray-400 mb-4">{lectures.length} Lectures</p>
@@ -166,6 +161,3 @@ function ViewLecture() {
 }
 
 export default ViewLecture;
-
-
-
