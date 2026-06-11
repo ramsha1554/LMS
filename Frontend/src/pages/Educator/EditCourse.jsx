@@ -30,9 +30,9 @@ function EditCourse() {
     formdata.append("description", description);
     formdata.append("category", category);
     formdata.append("price", price);
-    if (thumbnail) formdata.append("thumbnail", thumbnail);
+    if (thumbnail) formdata.append("image", thumbnail);
     try {
-      const { data } = await axiosClient.put(`/api/course/update/${courseId}`, formdata);
+      const { data } = await axiosClient.post(`/api/course/editcourse/${courseId}`, formdata);
       dispatch(setCreatorCourseData(
         creatorCourseData.map((c) => c._id === courseId ? data.course : c)
       ));
@@ -141,3 +141,5 @@ function EditCourse() {
 }
 
 export default EditCourse;
+
+
