@@ -46,3 +46,14 @@ export const getReviews = async (req, res) => {
     res.status(500).json({ success: false, message: error.message });
   }
 };
+// GET /api/review/getreviews
+export const getAllReviews = async (req, res) => {
+  try {
+    const reviews = await Review.find()
+      .populate("userId", "name photoUrl")
+      .sort({ createdAt: -1 });
+    res.status(200).json({ success: true, reviews });
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};

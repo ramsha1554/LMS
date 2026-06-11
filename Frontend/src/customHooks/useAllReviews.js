@@ -1,22 +1,17 @@
-import axios from "axios";
-import React, { useEffect } from "react";
-import { SERVER_URL } from "../lib/constants";
+import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { setReviewData } from "../redux/reviewSlice";
+import axiosClient from "../lib/axiosClient";
 
 const useAllReviews = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     const allReviews = async () => {
       try {
-        const result = await axios.get(SERVER_URL + "/api/review/getreview", {
-          withCredentials: true,
-        });
+        const result = await axiosClient.get("/api/review/getreviews");
         dispatch(setReviewData(result.data));
-        console.log(result.data);
       } catch (error) {
-        console.log(error);
+        console.error("Failed to fetch reviews:", error);
       }
     };
     allReviews();
