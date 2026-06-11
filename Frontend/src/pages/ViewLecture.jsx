@@ -108,10 +108,20 @@ function ViewLecture() {
                   />
                 </div>
                 {isCourseCompleted && (
-                  <p className="text-xs text-green-600 font-medium flex items-center gap-1">
-                    <CheckCircle className="w-3.5 h-3.5" /> Course completed!
-                  </p>
-                )}
+  <div className="flex items-center gap-3">
+    <p className="text-xs text-green-600 font-medium flex items-center gap-1">
+      <CheckCircle className="w-3.5 h-3.5" /> Course completed!
+    </p>
+    
+      href={`${import.meta.env.VITE_SERVER_URL}/api/certificate/${currentCourse._id}`}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-xs bg-black text-white px-3 py-1 rounded-md hover:bg-neutral-800 transition-colors"
+    >
+      Download Certificate
+    </a>
+  </div>
+)}
               </div>
             )}
           </div>
@@ -155,3 +165,4 @@ function ViewLecture() {
 }
 
 export default ViewLecture;
+
