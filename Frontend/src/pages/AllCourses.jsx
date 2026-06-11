@@ -1,9 +1,11 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect } from "react";
 import Nav from "../component/Nav";
 import { useSelector } from "react-redux";
 import Card from "../component/Card";
 import usePublishedCourse from "../customHooks/usePublishedCourse";
-import { BookOpen, Search, X } from "lucide-react";
+import { BookOpen, Search, X, ChevronLeft, ChevronRight } from "lucide-react";
+
+const COURSES_PER_PAGE = 6;
 
 function AllCourses() {
   usePublishedCourse();
@@ -12,6 +14,7 @@ function AllCourses() {
   const [search, setSearch] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
   const [priceFilter, setPriceFilter] = useState("all");
+  const [currentPage, setCurrentPage] = useState(1);
 
   const categories = useMemo(() => {
     const cats = courseData.map((c) => c.category).filter(Boolean);
@@ -34,12 +37,9 @@ function AllCourses() {
 
   const filtered = useMemo(() => {
     return courseData.filter((course) => {
-      const matchesSearch = course.title
-        ?.toLowerCase()
-        .includes(search.toLowerCase());
+      const matchesSearch = course.title?.toLowerCase().includes(search.toLowerCase());
       const matchesCategory =
-        selectedCategories.length === 0 ||
-        selectedCategories.includes(course.category);
+        selectedCategories.length === 0 || selectedCategories.includes(course.category);
       const matchesPrice =
         priceFilter === "all" ||
         (priceFilter === "free" && course.price === 0) ||
@@ -47,6 +47,17 @@ function AllCourses() {
       return matchesSearch && matchesCategory && matchesPrice;
     });
   }, [courseData, search, selectedCategories, priceFilter]);
+
+  // Reset to page 1 when filters change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [search, selectedCategories, priceFilter]);
+
+  const totalPages = Math.ceil(filtered.length / COURSES_PER_PAGE);
+  const paginated = filtered.slice(
+    (currentPage - 1) * COURSES_PER_PAGE,
+    currentPage * COURSES_PER_PAGE
+  );
 
   return (
     <div className="flex min-h-screen bg-neutral-50">
@@ -156,9 +167,7 @@ function AllCourses() {
               <BookOpen className="w-6 h-6" />
             </div>
             <div className="space-y-1">
-              <h3 className="text-sm font-semibold text-neutral-900">
-                No Courses Found
-              </h3>
+              <h3 className="text-sm font-semibold text-neutral-900">No Courses Found</h3>
               <p className="text-xs text-neutral-400 leading-relaxed">
                 Try adjusting your filters or search term.
               </p>
@@ -176,10 +185,45 @@ function AllCourses() {
 
         {/* Courses */}
         <div className="flex flex-wrap gap-6 mt-8">
-          {filtered.map((course, index) => (
+          {paginated.map((course, index) => (
             <Card key={index} course={course} />
           ))}
         </div>
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex items-center justify-center gap-2 mt-12">
+            <button
+              onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+              disabled={currentPage === 1}
+              className="p-2 rounded-lg border border-neutral-200 hover:bg-neutral-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-8 h-8 rounded-lg text-xs font-medium transition-colors
+                  ${currentPage === page
+                    ? "bg-black text-white"
+                    : "border border-neutral-200 hover:bg-neutral-100 text-neutral-600"
+                  }`}
+              >
+                {page}
+              </button>
+            ))}
+
+            <button
+              onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+              disabled={currentPage === totalPages}
+              className="p-2 rounded-lg border border-neutral-200 hover:bg-neutral-100 disabled:opacity-40 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </div>
+        )}
       </main>
     </div>
   );
