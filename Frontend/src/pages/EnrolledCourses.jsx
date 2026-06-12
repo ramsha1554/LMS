@@ -54,7 +54,7 @@ function EnrolledCourses() {
               <div
                 key={index}
                 className="bg-white rounded-2xl shadow-md overflow-hidden cursor-pointer hover:shadow-lg transition-all duration-200"
-                onClick={() => navigate(`/viewlecture/${course?.lectures?.[0]?._id}`)}
+                onClick={() => { if (course?.lectures?.length > 0) { navigate(`/viewlecture/${course.lectures[0]._id}`); } else { alert("This course has no lectures yet."); } }}
               >
                 <img src={course?.thumbnail || img} alt="" className="w-full h-[200px] object-cover" />
                 <div className="p-5 space-y-2">
@@ -64,7 +64,7 @@ function EnrolledCourses() {
                     <span className="text-sm text-gray-500">{course?.lectures?.length || 0} Lectures</span>
                     <button
                       className="bg-black text-white px-4 py-2 rounded-lg text-sm w-full"
-                      onClick={(e) => { e.stopPropagation(); navigate(`/viewlecture/${course?.lectures?.[0]?._id}`); }}
+                      onClick={(e) => { e.stopPropagation(); if (course?.lectures?.length > 0) { navigate(`/viewlecture/${course.lectures[0]._id}`); } else { alert("This course has no lectures yet."); } }}
                     >
                       Continue Learning
                     </button>
