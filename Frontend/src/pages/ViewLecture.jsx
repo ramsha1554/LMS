@@ -18,6 +18,20 @@ function ViewLecture() {
 
   const [completedLectures, setCompletedLectures] = useState([]);
   const [isCourseCompleted, setIsCourseCompleted] = useState(false);
+  const [freshLectures, setFreshLectures] = useState([]);
+
+  useEffect(() => {
+    if (!currentCourse?._id) return;
+    const fetchFreshLectures = async () => {
+      try {
+        const { data } = await axiosClient.get(`/api/course/courselecture/${currentCourse._id}`);
+        setFreshLectures(data.lectures || []);
+      } catch (err) {
+        console.error("Failed to fetch fresh lectures:", err);
+      }
+    };
+    fetchFreshLectures();
+  }, [currentCourse?._id]);
 
   const currentCourse = courseData?.find((course) =>
     course.lectures?.some((l) => l._id === lectureId)
@@ -27,7 +41,7 @@ function ViewLecture() {
     (id) => id === currentCourse?._id || id?._id === currentCourse?._id
   ) ?? false;
 
-  const lectures = currentCourse?.lectures || [];
+  const lectures = freshLectures.length > 0 ? freshLectures : (currentCourse?.lectures || []);
   const selectedLecture = lectures.find((l) => l._id === lectureId);
 
   useEffect(() => {
@@ -161,5 +175,7 @@ function ViewLecture() {
 }
 
 export default ViewLecture;
+
+
 
 
