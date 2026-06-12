@@ -20,7 +20,7 @@ function CreateLectures() {
   useEffect(() => {
     const fetchLectures = async () => {
       try {
-        const { data } = await axiosClient.get(`/api/course/getlecture/${courseId}`);
+        const { data } = await axiosClient.get(`/api/course/courselecture/${courseId}`);
         dispatch(setLectureData(data.lectures || []));
       } catch (error) {
         console.error("Failed to fetch lectures:", error);
