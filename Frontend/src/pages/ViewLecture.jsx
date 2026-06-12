@@ -4,7 +4,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useSelector } from "react-redux";
 import usePublishedCourse from "../customHooks/usePublishedCourse";
 import axiosClient from "../lib/axiosClient";
-import { SERVER_URL } from "../lib/constants";
 import { CheckCircle, Circle, Lock } from "lucide-react";
 
 function ViewLecture() {
@@ -20,6 +19,17 @@ function ViewLecture() {
   const [isCourseCompleted, setIsCourseCompleted] = useState(false);
   const [freshLectures, setFreshLectures] = useState([]);
 
+  const currentCourse = courseData?.find((course) =>
+    course.lectures?.some((l) => l._id === lectureId)
+  );
+
+  const isEnrolled = userData?.enrolledCourses?.some(
+    (id) => id === currentCourse?._id || id?._id === currentCourse?._id
+  ) ?? false;
+
+  const lectures = freshLectures.length > 0 ? freshLectures : (currentCourse?.lectures || []);
+  const selectedLecture = lectures.find((l) => l._id === lectureId);
+
   useEffect(() => {
     if (!currentCourse?._id) return;
     const fetchFreshLectures = async () => {
@@ -32,17 +42,6 @@ function ViewLecture() {
     };
     fetchFreshLectures();
   }, [currentCourse?._id]);
-
-  const currentCourse = courseData?.find((course) =>
-    course.lectures?.some((l) => l._id === lectureId)
-  );
-
-  const isEnrolled = userData?.enrolledCourses?.some(
-    (id) => id === currentCourse?._id || id?._id === currentCourse?._id
-  ) ?? false;
-
-  const lectures = freshLectures.length > 0 ? freshLectures : (currentCourse?.lectures || []);
-  const selectedLecture = lectures.find((l) => l._id === lectureId);
 
   useEffect(() => {
     if (!currentCourse?._id || !isEnrolled) return;
@@ -70,6 +69,22 @@ function ViewLecture() {
       setIsCourseCompleted(res.data.progress.isCompleted || false);
     } catch (err) {
       console.error("Failed to mark lecture complete:", err);
+    }
+  };
+
+  const handleCertificateDownload = async () => {
+    try {
+      const res = await axiosClient.get(`/api/certificate/${currentCourse._id}`, { responseType: "blob" });
+      const url = window.URL.createObjectURL(new Blob([res.data], { type: "application/pdf" }));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute("download", `certificate-${currentCourse.title?.replace(/\s+/g, "-") || "course"}.pdf`);
+      document.body.appendChild(link);
+      link.click();
+      link.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      alert("Failed to download certificate. Please try again.");
     }
   };
 
@@ -123,14 +138,12 @@ function ViewLecture() {
                     <p className="text-xs text-green-600 font-medium flex items-center gap-1">
                       <CheckCircle className="w-3.5 h-3.5" /> Course completed!
                     </p>
-                    <a
-                      href={SERVER_URL + "/api/certificate/" + currentCourse._id}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                    <button
+                      onClick={handleCertificateDownload}
                       className="text-xs bg-black text-white px-3 py-1 rounded-md hover:bg-neutral-800 transition-colors"
                     >
                       Download Certificate
-                    </a>
+                    </button>
                   </div>
                 )}
               </div>
@@ -175,7 +188,3 @@ function ViewLecture() {
 }
 
 export default ViewLecture;
-
-
-
-
