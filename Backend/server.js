@@ -25,14 +25,25 @@ const limiter = rateLimit({
 });
 app.use("/api/auth", limiter);
 
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:5174",
+  "http://localhost:5175",
+  "https://skillsync-lms.vercel.app",
+  "https://skillsync-lms-theta.vercel.app",
+];
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || [
-    "http://localhost:5173",
-    "http://localhost:5174",
-    "http://localhost:5175",
-  ],
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true,
 }));
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
@@ -49,6 +60,10 @@ app.get("/", (req, res) => {
   res.send("LMS Backend Running Successfully");
 });
 
+app.get("/api/health", (req, res) => {
+  res.status(200).json({ status: "ok", timestamp: new Date().toISOString() });
+});
+
 const startServer = async () => {
   try {
     await connectDB();
@@ -60,6 +75,5 @@ const startServer = async () => {
     process.exit(1);
   }
 };
+
 startServer();
-
-
