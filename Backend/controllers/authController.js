@@ -28,11 +28,16 @@ const SignUp = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(201).json({ message: "User created successfully", user });
+    const { password: _, ...safeUser } = user.toObject();
+
+    return res.status(201).json({
+      message: "User created successfully",
+      user: safeUser,
+    });
   } catch (error) {
-    return res.status(500).json({ message: "Signup failed", error: error.message });
+    return res.status(500).json({ message: "Signup failed" });
   }
 };
 
@@ -56,11 +61,16 @@ const Login = async (req, res) => {
       secure: process.env.NODE_ENV === "production",
       sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       path: "/",
-      maxAge: 24 * 60 * 60 * 1000,
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
-    return res.status(200).json({ message: "User Login successfully", user });
+    const { password: _, ...safeUser } = user.toObject();
+
+    return res.status(200).json({
+      message: "User Login successfully",
+      user: safeUser,
+    });
   } catch (error) {
-    return res.status(500).json({ message: "Login failed", error: error.message });
+    return res.status(500).json({ message: "Login failed" });
   }
 };
 
@@ -69,7 +79,7 @@ const Logout = async (req, res) => {
     await res.clearCookie("token");
     return res.status(200).json({ message: "User logged out successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Logout failed", error: error.message });
+    return res.status(500).json({ message: "Logout failed" });
   }
 };
 
@@ -89,7 +99,7 @@ const sendOtp = async (req, res) => {
     await sendMail(email, otp);
     return res.status(200).json({ message: "OTP sent to email" });
   } catch (error) {
-    return res.status(500).json({ message: "Failed to send OTP", error: error.message });
+    return res.status(500).json({ message: "Failed to send OTP" });
   }
 };
 
@@ -110,7 +120,7 @@ const verifyOtp = async (req, res) => {
     await user.save();
     return res.status(200).json({ message: "OTP verified successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "OTP verification failed", error: error.message });
+    return res.status(500).json({ message: "OTP verification failed" });
   }
 };
 
@@ -134,8 +144,9 @@ const resetPassword = async (req, res) => {
     await user.save();
     return res.status(200).json({ message: "Password reset successfully" });
   } catch (error) {
-    return res.status(500).json({ message: "Password reset failed", error: error.message });
+    return res.status(500).json({ message: "Password reset failed" });
   }
 };
 
 export { SignUp, Login, Logout, sendOtp, verifyOtp, resetPassword };
+

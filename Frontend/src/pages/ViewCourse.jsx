@@ -4,29 +4,24 @@ import { useSelector, useDispatch } from "react-redux";
 import img from "../assets/empty.jpg";
 import { ArrowLeft, Star, Lock, Infinity as InfinityIcon, Monitor, Award, Play, PlayCircle } from "lucide-react";
 import axiosClient from "../lib/axiosClient.js";
-import { toast } from "react-toastify";
 import usePublishedCourse from "../customHooks/usePublishedCourse";
+import { toast } from "react-toastify";
 
 function ViewCourse() {
+  usePublishedCourse();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { courseId } = useParams();
 
-  usePublishedCourse();
-
   const { courseData } = useSelector((state) => state.course);
   const { userData } = useSelector((state) => state.user);
-
   const course = courseData?.find((c) => c._id === courseId) || null;
-
   const isEnrolled = userData?.enrolledCourses?.some(
     (id) => id === courseId || id?._id === courseId
   ) ?? false;
 
   const [selectedLecture, setSelectedLecture] = useState(null);
   const [loading, setLoading] = useState(false);
-
-  // Reviews state
   const [reviews, setReviews] = useState([]);
   const [rating, setRating] = useState(5);
   const [comment, setComment] = useState("");
@@ -87,7 +82,7 @@ function ViewCourse() {
     setLoading(true);
     try {
       const { data } = await axiosClient.post("/api/payment/order", { courseId: course._id });
-      if (!data.success) { toast.error(data.message || "Failed to create order"); return; }
+      if (!data.success) { toast.error(data.message || "Failed to create order"); setLoading(false); return; }
       const options = {
         key: import.meta.env.VITE_RAZORPAY_KEY_ID,
         amount: data.amount,
@@ -135,7 +130,6 @@ function ViewCourse() {
             <ArrowLeft className="w-4 h-4" />
           </button>
         </div>
-
         <div className="flex flex-col md:flex-row gap-8">
           <div className="w-full md:w-1/2">
             <img src={course?.thumbnail || img} alt={course?.title || "Course thumbnail"} className="rounded-xl w-full border border-neutral-200 object-cover aspect-video" />
@@ -157,7 +151,7 @@ function ViewCourse() {
                 <span className="text-neutral-400 text-xs">({reviews.length} reviews)</span>
               </div>
               <div className="flex items-baseline gap-2 pt-1">
-                <span className="text-lg font-bold text-neutral-900">{course ? "Rs. " + (course.price ?? "0") : "Loading..."}</span>
+                <span className="text-lg font-bold text-neutral-900">{course ? "Rs." + (course.price ?? "0") : "Loading..."}</span>
               </div>
             </div>
             <div className="pt-2 border-t border-neutral-100 space-y-3">
@@ -166,15 +160,14 @@ function ViewCourse() {
                 <li className="flex items-center gap-3 text-xs text-neutral-600"><Monitor className="text-neutral-900 w-4 h-4" /><span>Access on mobile and desktop</span></li>
                 <li className="flex items-center gap-3 text-xs text-neutral-600"><Award className="text-neutral-900 w-4 h-4" /><span>Certificate of completion</span></li>
               </ul>
-            </div>
-            <div className="pt-2">
-              <button className="w-full md:w-auto px-6 py-2.5 bg-black hover:bg-neutral-900 text-white rounded-md text-xs font-medium transition-colors duration-200 cursor-pointer shadow-sm disabled:opacity-50" onClick={handlePayment} disabled={loading || !course}>
-                {loading ? "Processing..." : isEnrolled ? "Continue Learning" : "Enroll Now"}
-              </button>
+              <div className="pt-2">
+                <button className="w-full md:w-auto px-6 py-2.5 bg-black hover:bg-neutral-900 text-white rounded-md text-xs font-medium transition-colors duration-200 cursor-pointer shadow-sm disabled:opacity-50" onClick={handlePayment} disabled={loading || !course}>
+                  {loading ? "Processing..." : isEnrolled ? "Continue Learning" : "Enroll Now"}
+                </button>
+              </div>
             </div>
           </div>
         </div>
-
         <div className="flex flex-col md:flex-row gap-8 pt-6 border-t border-neutral-100">
           <div className="bg-white w-full md:w-2/5 p-6 rounded-xl border border-neutral-200 shadow-sm">
             <h2 className="text-xs font-semibold text-neutral-900 uppercase tracking-wider mb-1">Course Curriculum</h2>
@@ -205,17 +198,13 @@ function ViewCourse() {
             </div>
           </div>
         </div>
-
-        {/* Reviews Section */}
         <div className="pt-6 border-t border-neutral-100 space-y-6">
           <h2 className="text-sm font-semibold text-neutral-900 uppercase tracking-wider">Student Reviews</h2>
-
-          {/* Write Review — enrolled students only */}
           {isEnrolled && (
             <div className="bg-neutral-50 border border-neutral-200 rounded-xl p-5 space-y-3">
               <p className="text-xs font-semibold text-neutral-700">Write a Review</p>
               <div className="flex items-center gap-1">
-                {[1,2,3,4,5].map((star) => (
+                {[1, 2, 3, 4, 5].map((star) => (
                   <button key={star} onClick={() => setRating(star)}>
                     <Star className={`w-4 h-4 ${star <= rating ? "fill-amber-400 text-amber-400" : "text-neutral-300"}`} />
                   </button>
@@ -233,8 +222,6 @@ function ViewCourse() {
               </button>
             </div>
           )}
-
-          {/* Display Reviews */}
           {reviews.length === 0 ? (
             <p className="text-xs text-neutral-400">No reviews yet. Be the first to review!</p>
           ) : (
@@ -243,11 +230,11 @@ function ViewCourse() {
                 <div key={index} className="border border-neutral-100 rounded-xl p-4 space-y-1">
                   <div className="flex items-center gap-2">
                     <div className="w-7 h-7 rounded-full bg-neutral-200 flex items-center justify-center text-xs font-bold text-neutral-700">
-                      {review.userId?.name?.slice(0,1).toUpperCase() || "U"}
+                      {review.userId?.name?.slice(0, 1).toUpperCase() || "U"}
                     </div>
                     <span className="text-xs font-semibold text-neutral-800">{review.userId?.name || "User"}</span>
                     <div className="flex items-center gap-0.5 ml-auto">
-                      {[1,2,3,4,5].map((star) => (
+                      {[1, 2, 3, 4, 5].map((star) => (
                         <Star key={star} className={`w-3 h-3 ${star <= review.rating ? "fill-amber-400 text-amber-400" : "text-neutral-200"}`} />
                       ))}
                     </div>
@@ -258,13 +245,9 @@ function ViewCourse() {
             </div>
           )}
         </div>
-
       </div>
     </div>
   );
 }
 
 export default ViewCourse;
-
-
-

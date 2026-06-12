@@ -10,6 +10,8 @@ import userRouter from "./routes/userRoute.js";
 import courseRouter from "./routes/courseRoute.js";
 import reviewRouter from "./routes/reviewRoute.js";
 import paymentRouter from "./routes/paymentRoute.js";
+import certificateRouter from "./routes/certificateRoute.js";
+import courseProgressRouter from "./routes/courseProgressRoute.js";
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -40,6 +42,8 @@ app.use("/api/user", userRouter);
 app.use("/api/course", courseRouter);
 app.use("/api/review", reviewRouter);
 app.use("/api/payment", paymentRouter);
+app.use("/api/certificate", certificateRouter);
+app.use("/api/progress", courseProgressRouter);
 
 app.get("/", (req, res) => {
   res.send("LMS Backend Running Successfully");
@@ -57,3 +61,5 @@ const startServer = async () => {
   }
 };
 startServer();
+
+

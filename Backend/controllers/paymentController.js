@@ -1,4 +1,5 @@
 import User from "../models/user.model.js";
+import Payment from "../models/paymentModel.js";
 import Course from "../models/courseModel.js";
 import getRazorpay from "../config/razorpay.js";
 import crypto from "crypto";
@@ -34,6 +35,43 @@ export const createOrder = async (req, res) => {
   }
 };
 
+export const webhookPayment = async (req, res) => {
+  try {
+    const signature = req.headers["x-razorpay-signature"];
+    const body = req.body;
+    const expectedSignature = crypto
+      .createHmac("sha256", process.env.RAZORPAY_KEY_SECRET)
+      .update(body)
+      .digest("hex");
+
+    if (expectedSignature !== signature) {
+      return res.status(400).json({ message: "Invalid webhook signature" });
+    }
+
+    const event = JSON.parse(body.toString());
+
+    if (event.event === "payment.captured") {
+      const { courseId, userId } = event.payload.payment.entity.notes;
+
+      const user = await User.findById(userId);
+      if (user && !user.enrolledCourses.includes(courseId)) {
+        user.enrolledCourses.push(courseId);
+        await user.save();
+      }
+
+      const course = await Course.findById(courseId);
+      if (course && !course.enrolledStudents.includes(userId)) {
+        course.enrolledStudents.push(userId);
+        await course.save();
+      }
+    }
+
+    res.status(200).json({ received: true });
+  } catch (error) {
+    res.status(500).json({ message: "Webhook error" });
+  }
+};
+
 export const verifyPayment = async (req, res) => {
   try {
     const { courseId, razorpay_order_id, razorpay_payment_id, razorpay_signature } = req.body;
@@ -60,6 +98,16 @@ export const verifyPayment = async (req, res) => {
       course.enrolledStudents.push(userId);
       await course.save();
     }
+    await Payment.create({
+      userId,
+      courseId,
+      razorpayOrderId: razorpay_order_id,
+      razorpayPaymentId: razorpay_payment_id,
+      amount: (await Course.findById(courseId))?.price || 0,
+      currency: "INR",
+      status: "captured",
+    });
+
     return res.status(200).json({ success: true, message: "Payment verified and enrollment successful" });
   } catch (error) {
     return res.status(500).json({ message: `Payment verification failed: ${error.message}` });

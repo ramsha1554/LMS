@@ -186,12 +186,12 @@ export const editLecture = async (req, res) => {
     if (lectureTitle) {
       lecture.lectureTitle = lectureTitle;
     }
-    lecture.isPreviewFree = isPreviewFree;
+    lecture.isPreviewFree = isPreviewFree === true || isPreviewFree === "true";
 
     await lecture.save();
     return res.status(200).json(lecture);
   } catch (error) {
-    console.error("EditLecture error:", error); return res.status(500).json({ message: `failed to edit Lecture ${error}` });
+    return res.status(500).json({ message: "Failed to edit lecture" });
   }
 };
 
