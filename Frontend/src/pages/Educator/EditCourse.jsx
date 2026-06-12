@@ -34,7 +34,7 @@ function EditCourse() {
     try {
       const { data } = await axiosClient.post(`/api/course/editcourse/${courseId}`, formdata);
       dispatch(setCreatorCourseData(
-        creatorCourseData.map((c) => c._id === courseId ? data.course : c)
+        creatorCourseData.map((c) => c._id === courseId ? data : c)
       ));
       toast.success("Course updated successfully");
       navigate("/educator/courses");
