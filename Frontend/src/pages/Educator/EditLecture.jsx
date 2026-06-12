@@ -42,7 +42,7 @@ function EditLecture() {
     setLoading(true);
     const formdata = new FormData();
     formdata.append("lectureTitle", lectureTitle);
-    if (videoFile) formdata.append("videoUrl", videoFile);
+    if (videoFile) formdata.append("video", videoFile);
     formdata.append("isPreviewFree", isPreviewFree);
     try {
       const result = await axiosClient.post(`/api/course/editlecture/${lectureId}`, formdata);
