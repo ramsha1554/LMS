@@ -68,7 +68,7 @@ function Dashboard() {
             </div>
           )}
           <div className="flex-1 text-center md:text-left space-y-1">
-            <h1 className="text-xl font-bold text-neutral-900">Welcome back, {userData?.name || "Educator"} 👋</h1>
+            <h1 className="text-xl font-bold text-neutral-900">Welcome back, {userData?.name || "Educator"} </h1>
             <p className="text-sm text-neutral-500">{userData?.description || "Start creating courses for your students."}</p>
           </div>
         </div>
