@@ -38,7 +38,7 @@ function ReviewPage() {
             </p>
             <div>
               <h4 className="text-sm font-semibold text-neutral-900">
-                Alex Johnson
+              Ali Khan
               </h4>
               <span className="text-xs text-neutral-400 font-medium">
                 Full Stack Developer
