@@ -14,6 +14,8 @@ import certificateRouter from "./routes/certificateRoute.js";
 import courseProgressRouter from "./routes/courseProgressRoute.js";
 
 const app = express();
+app.set("trust proxy", 1);
+app.set("trust proxy", 1);
 const port = process.env.PORT || 3000;
 
 app.use(helmet());
@@ -25,13 +27,15 @@ const limiter = rateLimit({
 });
 app.use("/api/auth", limiter);
 
-const allowedOrigins = [
-  "http://localhost:5173",
-  "http://localhost:5174",
-  "http://localhost:5175",
-  "https://skillsync-lms.vercel.app",
-  "https://skillsync-lms-theta.vercel.app",
-];
+const allowedOrigins = process.env.CORS_ORIGIN
+  ? process.env.CORS_ORIGIN.split(",").map(o => o.trim())
+  : [
+      "http://localhost:5173",
+      "http://localhost:5174",
+      "http://localhost:5175",
+      "https://skillsync-lms.vercel.app",
+      "https://skillsync-lms-theta.vercel.app",
+    ];
 
 app.use(cors({
   origin: (origin, callback) => {
