@@ -65,30 +65,34 @@ function Footer() {
             Follow Us
           </h4>
           <div className="flex gap-4 items-center">
-            <a
-              href="https://github.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
-            >
-              <Github className="w-4 h-4" />
-            </a>
-            <a
-              href="https://linkedin.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
-            >
-              <Linkedin className="w-4 h-4" />
-            </a>
-            <a
-              href="https://instagram.com"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
-            >
-              <Instagram className="w-4 h-4" />
-            </a>
+          <a
+  href="https://github.com/ramsha1554"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
+>
+  <Github className="w-4 h-4" />
+</a>
+
+<a
+  href="https://www.linkedin.com/in/syeda-ramsha-anjum1554/"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
+>
+  <Linkedin className="w-4 h-4" />
+</a>
+
+<a
+  href="https://instagram.com/_ramshaa.13"
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-8 h-8 rounded-full border border-neutral-800 flex items-center justify-center text-neutral-400 hover:text-white hover:border-neutral-700 transition-colors duration-200"
+>
+  <Instagram className="w-4 h-4" />
+</a>
+             
+            
           </div>
         </div>
       </div>
